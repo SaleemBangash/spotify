@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:spotify/bottom_bar.dart';
+import 'package:spotify/sportsinterest.dart';
 
 import 'INterests.dart';
 import 'comments.dart';
@@ -22,8 +23,10 @@ class _HealthState extends State<Health> {
           backgroundColor: Color(0xff272525),
           leading: GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => (BottomBar())));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => (interestedsports())));
               },
               child: Icon(Icons.arrow_back, color: Colors.white)),
           title: Text(

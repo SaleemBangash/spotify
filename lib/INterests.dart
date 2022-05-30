@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'Sports_Community.dart';
+import 'Home.dart';
 import 'hithere.dart';
 
 class Interests extends StatelessWidget {
@@ -147,10 +147,8 @@ class Interests extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => (sportscommunity())));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => (Home())));
                   },
                   child: Container(
                     height: 40,

@@ -1,9 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:spotify/Chattroom.dart';
-import 'package:spotify/INterests.dart';
+import 'package:http/http.dart' as http;
+import 'package:spotify/models/search_model.dart';
 import 'package:spotify/sportsinterest.dart';
+
+import 'variables/variables.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({Key? key}) : super(key: key);
@@ -13,39 +18,18 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  bool aChecked = false;
+  bool bChecked = false;
+  bool cChecked = false;
+  bool isChecked = false;
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
+  List<SearchModel> searchList = [];
+  String follower_id = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // bottomNavigationBar: Container(
-        //     decoration: BoxDecoration(
-        //       border: Border.all(
-        //           color: Colors.black, //color of border
-        //           width: 2),
-        //     ),
-        //     height: 50,
-        //     width: MediaQuery.of(context).size.width,
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //       children: [
-        //         Column(
-        //           children: [Icon(Icons.home), Text("home")],
-        //         ),
-        //         //SizedBox(width: 30,),
-        //         Column(
-        //           children: [Icon(Icons.search), Text("search")],
-        //         ),
-        //         //SizedBox(width: 30,),
-
-        //         //SizedBox(width: 30,),
-        //         Column(
-        //           children: [Icon(Icons.chat), Text("chat")],
-        //         ),
-        //         // SizedBox(width: 30,),
-        //         Column(
-        //           children: [Icon(Icons.person), Text("profile")],
-        //         ),
-        //       ],
-        //     )),
         appBar: AppBar(
           centerTitle: true,
           title: Text("Search Here", style: TextStyle(color: Colors.white)),
@@ -64,15 +48,19 @@ class _SearchBarState extends State<SearchBar> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(top: 30),
+          child: Form(
+            key: formKey,
             child: Column(
               children: [
                 //Search baar
                 SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
                     width: 310,
                     height: 45,
                     child: TextFormField(
+                      controller: nameController,
                       style: TextStyle(height: 1.5),
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -81,417 +69,215 @@ class _SearchBarState extends State<SearchBar> {
                               borderRadius: BorderRadius.circular(15)),
                           hintText: "Search",
                           filled: true,
-                          suffixIcon: Icon(Icons.search),
+                          suffixIcon: IconButton(
+                              icon: Icon(Icons.search),
+                              onPressed: () {
+                                serachUser();
+                              }),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10)),
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.text,
                     )),
 
-                //perfect container
-                SizedBox(height: 20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 90,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(width: 1)),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: searchList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Container(
+                            height: 90,
+                            width: 170,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(width: 1)),
+                            child: Column(
                               children: [
-                                Image.asset(
-                                  "assets/download.png",
-                                  width: 50,
-                                  height: 50,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Image.asset(
+                                        "assets/person.png",
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                      // SizedBox(
+                                      //   width: 40,
+                                      // ),
+                                      Text(
+                                        searchList[index].name,
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text("Cricket")
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            // String comment = nameController.text;
+                                            // String email = emailController.text;
+                                            registerUser(searchList[index].id);
+                                          }
+                                          print(follower_id);
+                                        },
+                                        child: Container(
+                                          height: 25,
+                                          width: 60,
+                                          decoration: BoxDecoration(
+                                            color: Colors.cyan,
+                                            borderRadius:
+                                                new BorderRadius.circular(5.0),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "connect",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.normal,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      // SizedBox(
+                                      //   width: 40,
+                                      // ),
+                                      Container(
+                                        height: 25,
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          color: Colors.cyan,
+                                          borderRadius:
+                                              new BorderRadius.circular(5.0),
+                                        ),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        (chatt(
+                                                          receiver_id:
+                                                              searchList[index]
+                                                                  .id,
+                                                        ))));
+                                          },
+                                          child: Center(
+                                            child: Text(
+                                              "Message",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.normal,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => (SearchBar())));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Join",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 90,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(width: 1)),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                "assets/download.png",
-                                width: 50,
-                                height: 50,
-                              ),
-                              Text("FootBall")
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => (SearchBar())));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Join",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 90,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(width: 1)),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Image.asset(
-                                  "assets/download.png",
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                Text("Cricket")
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => (SearchBar())));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Join",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 90,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(width: 1)),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                "assets/download.png",
-                                width: 50,
-                                height: 50,
-                              ),
-                              Text("Hockey")
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => (SearchBar())));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Join",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 90,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(width: 1)),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Image.asset(
-                                  "assets/download.png",
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                Text("Tennis")
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => (SearchBar())));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Join",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 90,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(width: 1)),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                "assets/download.png",
-                                width: 50,
-                                height: 50,
-                              ),
-                              Text("BasketBall")
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => (SearchBar())));
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white),
-                                  Text(
-                                    "Join",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                // Container(
-                //   width: 100,
-                //   decoration: BoxDecoration(
-                //     border: Border.all(
-                //       color: Colors.black,
-                //       width: 1,
-                //     ),
-                //   ),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       //textt///////////
-
-                //       Container(
-                //         child: Row(
-                //           children: [
-                //             Container(
-                //                 height: 50,
-                //                 width: 50,
-                //                 child: Image.asset("assets/download.png")),
-                //             Text("Sport 1")
-                //           ],
-                //         ),
-                //       )
-                //       //button
-                //       ,
-                //       // Container(
-                //       //     padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                //       //     height: 50,
-                //       //     width: 90,
-                //       //     child: RaisedButton(
-                //       //       onPressed: () {
-                //       //         // Navigator.push(context, MaterialPageRoute(builder: (context)=>(community())));
-                //       //       },
-                //       //       color: Colors.blueGrey,
-                //       //       shape: RoundedRectangleBorder(
-                //       //           borderRadius: BorderRadius.circular(10)),
-                //       //       child: Center(
-                //       //         child: Text("+ Join ",
-                //       //             style: TextStyle(color: Colors.white)),
-                //       //       ),
-                //       //     ))
-                //     ],
-                //   ),
-                // )
+                        ),
+                      ],
+                    );
+                  },
+                )
               ],
             ),
           ),
         ));
+  }
+
+  registerUser(String follower_id) async {
+    print("Request Called ::::::::::::::::::::::::::::::::::::::");
+    Map<String, String> header = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      "Authorization": "Bearer " + userModel.token
+    };
+    Map<String, dynamic> requestMap = {
+      "follower_id": follower_id,
+    };
+
+    var url = Uri.parse('http://spotify.bhattihospital.com/api/FollowUser');
+
+    var response =
+        await http.post(url, body: jsonEncode(requestMap), headers: header);
+    if (response.statusCode == 200) {
+      print('IF:::' + response.body);
+      var responseBody = json.decode(response.body);
+      if (responseBody['message'] == 'Friend request Sent Successfuly') {
+        /// navigate to login screen
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Friend Request Sent'),
+              );
+            });
+
+        print('MESSAGE:::::::' + responseBody['message']);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(responseBody['message']),
+              );
+            });
+      }
+    } else {
+      print('ELSE:::' + response.statusCode.toString());
+    }
+  }
+
+  serachUser() async {
+    if (searchList.isNotEmpty) {
+      searchList.clear();
+    }
+    Map<String, String> header = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      "Authorization": "Bearer " + userModel.token
+    };
+
+    var url = Uri.parse('http://spotify.bhattihospital.com/api/searchUser/' +
+        nameController.text);
+    var response = await http.get(url, headers: header);
+    if (response.statusCode == 200) {
+      var jsonBody = json.decode(response.body);
+      print("RESPONSE DATA " + jsonBody.toString());
+
+      for (int i = 0; i < jsonBody['users'].length; i++) {
+        searchList.add(SearchModel(
+            id: jsonBody['users'][i]['id'].toString(),
+            name: jsonBody['users'][i]['name'].toString(),
+            userName: jsonBody['users'][i]['userName'].toString(),
+            email: jsonBody['users'][i]['email'].toString(),
+            email_verified_at:
+                jsonBody['users'][i]['email_verified_at'].toString(),
+            image: jsonBody['users'][i]['image'].toString(),
+            bio: jsonBody['users'][i]['bio'].toString(),
+            created_at: jsonBody['users'][i]['created_at'].toString(),
+            updated_at: jsonBody['users'][i]['updated_at'].toString()));
+      }
+      setState(() {});
+    }
   }
 }

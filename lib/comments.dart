@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:spotify/bottom_bar.dart';
+import 'package:spotify/sportsinterest.dart';
 
 class Comments extends StatefulWidget {
   const Comments({Key? key}) : super(key: key);
@@ -54,8 +55,10 @@ class _CommentsState extends State<Comments> {
           backgroundColor: Color(0xff272525),
           leading: GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => (BottomBar())));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => (interestedsports())));
               },
               child: Icon(Icons.arrow_back, color: Colors.white)),
           title: Text(

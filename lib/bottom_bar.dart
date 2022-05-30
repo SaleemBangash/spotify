@@ -5,13 +5,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:spotify/Chattroom.dart';
 import 'package:spotify/Community.dart';
 import 'package:spotify/Searchbar.dart';
-import 'package:spotify/Sports_Community.dart';
+import 'package:spotify/Home.dart';
+import 'package:spotify/community_two.dart';
 import 'package:spotify/create_post.dart';
 import 'package:spotify/getstarted.dart';
+import 'package:spotify/new_chat.dart';
 import 'package:spotify/profile.dart';
 import 'package:spotify/sportsinterest.dart';
+import 'package:spotify/update_profile.dart';
 
 import '../main.dart';
+import 'variables/variables.dart';
 
 class BottomBar extends StatefulWidget {
   // final Widget body;
@@ -29,11 +33,14 @@ class _BottomBarState extends State<BottomBar> {
   // late final Widget? body;
   int _selectedIndex = 0;
   final List<Widget> screens = [
-    sportscommunity(),
+    Home(),
     SearchBar(),
-    CreatePost(),
-    chatt(),
-    profile()
+    CommunityTwo(),
+    CreatePost(
+        // community_id: csearchList[0].interest_id,
+        ),
+    NewcChat(),
+    UpdateProfile()
     //Center(child: Text("Settings")),
   ];
 
@@ -81,6 +88,13 @@ class _BottomBarState extends State<BottomBar> {
           BottomNavigationBarItem(
             icon: Icon(
               FontAwesomeIcons.search,
+              size: 21,
+            ),
+            label: "",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.cabin,
               size: 21,
             ),
             label: "",

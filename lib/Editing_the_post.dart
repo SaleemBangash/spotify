@@ -2,10 +2,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:spotify/Community.dart';
 import 'package:spotify/INterests.dart';
-import 'package:spotify/Sports_Community.dart';
+import 'package:spotify/Home.dart';
 import 'package:spotify/bottom_bar.dart';
+import 'package:spotify/create_post.dart';
 import 'package:spotify/getstarted.dart';
 import 'package:spotify/sportsinterest.dart';
 
@@ -37,37 +39,6 @@ class _EditingState extends State<Editing> {
           ),
         ),
       ),
-      // bottomNavigationBar: Container(
-      //     decoration: BoxDecoration(
-      //       border: Border.all(
-      //           color: Colors.black, //color of border
-      //           width: 2),
-      //     ),
-      //     height: 50,
-      //     width: MediaQuery.of(context).size.width,
-      //     child: Row(
-      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //       children: [
-      //         Column(
-      //           children: [Icon(Icons.home), Text("home")],
-      //         ),
-      //         //SizedBox(width: 30,),
-      //         Column(
-      //           children: [Icon(Icons.search), Text("search")],
-      //         ),
-      //         //SizedBox(width: 30,),
-
-      //         //SizedBox(width: 30,),
-      //         Column(
-      //           children: [Icon(Icons.chat), Text("chat")],
-      //         ),
-      //         // SizedBox(width: 30,),
-      //         Column(
-      //           children: [Icon(Icons.person), Text("profile")],
-      //         ),
-      //       ],
-      //     )),
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 30),
@@ -101,9 +72,32 @@ class _EditingState extends State<Editing> {
                 height: 50,
               ),
               GestureDetector(
+                onTap: () => _showChoiceDialog(context),
+                child: Container(
+                  height: 40,
+                  width: 180,
+                  decoration: BoxDecoration(
+                    color: Colors.cyan,
+                    borderRadius: new BorderRadius.circular(10.0),
+                  ),
+                  child: Center(
+                      child: Text(
+                    "Add Photo",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.normal,
+                        color: Colors.white),
+                  )),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => (Interests())));
+                      MaterialPageRoute(builder: (context) => (BottomBar())));
                 },
                 child: Container(
                   height: 40,
@@ -128,10 +122,8 @@ class _EditingState extends State<Editing> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => (interestedsports())));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => (BottomBar())));
                 },
                 child: Container(
                   height: 40,
@@ -151,38 +143,81 @@ class _EditingState extends State<Editing> {
                   )),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => (interestedsports())));
-                },
-                child: Container(
-                  height: 40,
-                  width: 180,
-                  decoration: BoxDecoration(
-                    color: Colors.cyan,
-                    borderRadius: new BorderRadius.circular(10.0),
-                  ),
-                  child: Center(
-                      child: Text(
-                    "Add Photo",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.normal,
-                        color: Colors.white),
-                  )),
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  PickedFile? imageFile = null;
+
+  // Future<void> _showChoiceDialog(BuildContext context) async {
+  Future<void> _showChoiceDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Choose option",
+              style: TextStyle(color: Colors.blue),
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Divider(
+                    height: 1,
+                    color: Colors.blue,
+                  ),
+                  ListTile(
+                    onTap: () {
+                      _openGallery(context);
+                    },
+                    title: Text("Gallery"),
+                    leading: Icon(
+                      Icons.account_box,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: Colors.blue,
+                  ),
+                  ListTile(
+                    onTap: () {
+                      _openCamera(context);
+                    },
+                    title: Text("Camera"),
+                    leading: Icon(
+                      Icons.camera,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _openGallery(BuildContext context) async {
+    final pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      imageFile = pickedFile!;
+    });
+
+    Navigator.pop(context);
+  }
+
+  void _openCamera(BuildContext context) async {
+    final pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    setState(() {
+      imageFile = pickedFile!;
+    });
+    Navigator.pop(context);
   }
 }
