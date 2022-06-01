@@ -3,10 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:spotify/Chattroom.dart';
-import 'package:spotify/INterests.dart';
-import 'package:spotify/bottom_bar.dart';
-import 'package:spotify/community_one.dart';
+
 import 'package:spotify/sportsinterest.dart';
 import 'package:http/http.dart' as http;
 import 'Home.dart';
@@ -28,6 +25,7 @@ class _CommunityTwoState extends State<CommunityTwo> {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var formKey = GlobalKey<FormState>();
+  List<CSearchModel> csearchList = [];
   String community_id = '';
   @override
   Widget build(BuildContext context) {
@@ -80,7 +78,6 @@ class _CommunityTwoState extends State<CommunityTwo> {
                               vertical: 10, horizontal: 10)),
                       keyboardType: TextInputType.emailAddress,
                     )),
-
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: csearchList.length,
@@ -178,16 +175,18 @@ class _CommunityTwoState extends State<CommunityTwo> {
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
       print("RESPONSE DATA " + jsonBody.toString());
-      for (int i = 0; i < jsonBody['users'].length; i++) {
-        csearchList.add(CSearchModel(
-            id: jsonBody['users'][i]['id'].toString(),
-            interest_id: jsonBody['users'][i]['interest_id'].toString(),
-            user_id: jsonBody['users'][i]['user_id'].toString(),
-            community_name: jsonBody['users'][i]['community_name'].toString(),
-            created_at: jsonBody['users'][i]['created_at'].toString(),
-            updated_at: jsonBody['users'][i]['updated_at'].toString()));
-      }
-      // setState(() {});
+
+      setState(() {
+        for (int i = 0; i < jsonBody['users'].length; i++) {
+          csearchList.add(CSearchModel(
+              id: jsonBody['users'][i]['id'].toString(),
+              interest_id: jsonBody['users'][i]['interest_id'].toString(),
+              user_id: jsonBody['users'][i]['user_id'].toString(),
+              community_name: jsonBody['users'][i]['community_name'].toString(),
+              created_at: jsonBody['users'][i]['created_at'].toString(),
+              updated_at: jsonBody['users'][i]['updated_at'].toString()));
+        }
+      });
     }
   }
 

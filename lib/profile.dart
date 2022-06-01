@@ -98,16 +98,10 @@ class _profileState extends State<profile> {
                                     // ),
                                     ),
                                 child: ClipOval(
-                                    child: profileList[0].image.toString() ==
-                                            'null'
-                                        ? Image.asset(
-                                            "assets/person.png",
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.network(
-                                            profileList[0].image,
-                                            fit: BoxFit.cover,
-                                          )),
+                                    child: Image.network(
+                                  profileList[0].image,
+                                  fit: BoxFit.cover,
+                                )),
                               )
                             // Text("Choose Image")
                             : Image.file(
@@ -222,8 +216,8 @@ class _profileState extends State<profile> {
                         // String imageFile = PickedFile.imageFile;
                         if (imageFile == null) {
                         } else {
-                          updateProfileData();
                           registerUser(name, email, bio, password);
+                          updateProfileData();
                         }
                       }
                     },

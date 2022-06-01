@@ -1,3 +1,4 @@
+import 'package:spotify/models/all_community_model.dart';
 import 'package:spotify/models/post_model.dart';
 import 'package:spotify/models/user_model.dart';
 
@@ -15,6 +16,7 @@ late UserModel userModel;
 List<UserPostModel> userspostList = [];
 List<InterestModel> interestList = [];
 List<ProfileModel> profileList = [];
-List<CSearchModel> csearchList = [];
+
 List<CommentModel> commentList = [];
 List<ChatModel> chatList = [];
+List<AllCommunityModel> allCommunityList = [];

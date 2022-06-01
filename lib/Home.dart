@@ -693,18 +693,20 @@ class _HomeState extends State<Home> {
         headers: header);
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
-      for (int i = 0; i < jsonBody['message'].length; i++) {
-        postList.add(PostModel(
-            id: jsonBody['message'][i]['id'].toString(),
-            userID: jsonBody['message'][i]['user_id'].toString(),
-            postImage: jsonBody['message'][i]['postImage'].toString(),
-            description: jsonBody['message'][i]['description'].toString(),
-            date: jsonBody['message'][i]['date'].toString(),
-            time: jsonBody['message'][i]['time'].toString(),
-            name: jsonBody['message'][i]['name'].toString(),
-            image: jsonBody['message'][i]['image'].toString()));
-      }
-      setState(() {});
+
+      setState(() {
+        for (int i = 0; i < jsonBody['message'].length; i++) {
+          postList.add(PostModel(
+              id: jsonBody['message'][i]['id'].toString(),
+              userID: jsonBody['message'][i]['user_id'].toString(),
+              postImage: jsonBody['message'][i]['postImage'].toString(),
+              description: jsonBody['message'][i]['description'].toString(),
+              date: jsonBody['message'][i]['date'].toString(),
+              time: jsonBody['message'][i]['time'].toString(),
+              name: jsonBody['message'][i]['name'].toString(),
+              image: jsonBody['message'][i]['image'].toString()));
+        }
+      });
     }
   }
 

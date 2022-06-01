@@ -102,20 +102,32 @@ class _SearchBarState extends State<SearchBar> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Image.asset(
-                                        "assets/person.png",
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                      // SizedBox(
-                                      //   width: 40,
-                                      // ),
+                                      searchList[index].image.toString() ==
+                                              'null'
+                                          ? ClipOval(
+                                              child: Image.asset(
+                                                "assets/download.png",
+                                                width: 50,
+                                                height: 50,
+                                              ),
+                                            )
+                                          : ClipOval(
+                                              child: Image.network(
+                                                searchList[index].image,
+                                                fit: BoxFit.cover,
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            ),
                                       Text(
                                         searchList[index].name,
                                         style: TextStyle(color: Colors.black),
                                       ),
                                     ],
                                   ),
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(

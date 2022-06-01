@@ -45,7 +45,7 @@ class _NewcChatState extends State<NewcChat> {
         ),
       ),
       body: chatList.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: Text("No Chat"))
           : Column(
               children: [
                 SizedBox(

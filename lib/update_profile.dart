@@ -101,186 +101,210 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 SizedBox(
                   height: 30,
                 ),
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(shape: BoxShape.circle
-                      // image: DecorationImage(
-                      //   image:
-                      //       const AssetImage('assets/images/john.jpg'),
-                      //   fit: BoxFit.fill,
-                      // ),
-                      ),
-                  child: ClipOval(
-                    child: Image.network(
-                      profileList[0].image,
-                      // width: 70.0,
-                      // height: 70.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  profileList[0].name,
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Personal Information",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => profile()));
-                          })
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Name",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      // IconButton(
-                      //     icon: Icon(Icons.edit),
-                      //     onPressed: () {
-                      //       Navigator.of(context).push(MaterialPageRoute(
-                      //           builder: (context) => profile()));
-                      //       // setState(() {
-                      //       //   _isEnable = true;
-                      //       // });
-                      //     })
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      profileList[0].name,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Email",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      // IconButton(
-                      //     icon: Icon(Icons.edit),
-                      //     onPressed: () {
-                      //       setState(() {
-                      //         _isEnable = true;
-                      //       });
-                      //     })
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      profileList[0].email,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Bio",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      // IconButton(
-                      //     icon: Icon(Icons.edit),
-                      //     onPressed: () {
-                      //       setState(() {
-                      //         _isEnable = true;
-                      //       });
-                      //     })
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      profileList[0].bio,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: profileList.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(shape: BoxShape.circle
+                                  // image: DecorationImage(
+                                  //   image:
+                                  //       const AssetImage('assets/images/john.jpg'),
+                                  //   fit: BoxFit.fill,
+                                  // ),
+                                  ),
+                              child: ClipOval(
+                                child: Image.network(
+                                  profileList[index].image,
+                                  // width: 70.0,
+                                  // height: 70.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              profileList[index].name,
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Personal Information",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    profile()));
+                                      })
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Name",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  // IconButton(
+                                  //     icon: Icon(Icons.edit),
+                                  //     onPressed: () {
+                                  //       Navigator.of(context).push(MaterialPageRoute(
+                                  //           builder: (context) => profile()));
+                                  //       // setState(() {
+                                  //       //   _isEnable = true;
+                                  //       // });
+                                  //     })
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  profileList[index].name,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Email",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  // IconButton(
+                                  //     icon: Icon(Icons.edit),
+                                  //     onPressed: () {
+                                  //       setState(() {
+                                  //         _isEnable = true;
+                                  //       });
+                                  //     })
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  profileList[index].email,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Bio",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  // IconButton(
+                                  //     icon: Icon(Icons.edit),
+                                  //     onPressed: () {
+                                  //       setState(() {
+                                  //         _isEnable = true;
+                                  //       });
+                                  //     })
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  profileList[index].bio,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 userspostList.isEmpty
-                    ? CircularProgressIndicator()
+                    ? Center(child: Text("No Posts"))
                     : Expanded(
                         child: ListView.builder(
                           itemCount: userspostList.length,
@@ -1323,6 +1347,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   void getProfileData() async {
+    if (profileList.isNotEmpty) {
+      profileList.clear();
+    }
     if (userspostList.isNotEmpty) {
       userspostList.clear();
     }
@@ -1339,8 +1366,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
         ),
         headers: header);
     if (response.statusCode == 200) {
+      var jsonBody = json.decode(response.body);
+
       setState(() {
-        var jsonBody = json.decode(response.body);
         profileList.add(ProfileModel(
           tokan: jsonBody['profile']['tokan'].toString(),
           id: jsonBody['profile']['id'].toString(),
@@ -1350,7 +1378,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
           image: jsonBody['profile']['image'].toString(),
           bio: jsonBody['profile']['bio'].toString(),
         ));
-
         for (int i = 0; i < jsonBody['profile']['posts'].length; i++) {
           userspostList.add(UserPostModel(
               id: jsonBody['profile']['posts'][i]['id'].toString(),

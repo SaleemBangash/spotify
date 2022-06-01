@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
 import 'dart:io';
@@ -13,6 +13,7 @@ import 'package:spotify/profile.dart';
 import 'package:spotify/sportsinterest.dart';
 import 'package:http/http.dart' as http;
 
+import 'models/all_community_model.dart';
 import 'models/community_model.dart';
 import 'variables/variables.dart';
 
@@ -42,12 +43,12 @@ class _CreatePostState extends State<CreatePost> {
   var nameController = TextEditingController();
   var descController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCommunityList();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   getCommunityList(community_id);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,54 +80,86 @@ class _CreatePostState extends State<CreatePost> {
                 SizedBox(
                   height: 10,
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(),
-                //   child: Container(
-                //     margin: EdgeInsets.all(19),
-                //     decoration: BoxDecoration(
-                //       color: Color.fromARGB(255, 220, 217, 217),
-                //       border: Border.all(width: 1),
-                //       borderRadius: BorderRadius.circular(10),
-                //     ),
-                //     width: 300,
-                //     height: 40,
-                //     child: DropdownButtonHideUnderline(
-                //       child: DropdownButton2(
-                //         hint: Text(
-                //           'Select Community',
-                //           style: TextStyle(
-                //             fontSize: 14,
-                //             color: Color.fromARGB(255, 0, 0, 0),
-                //           ),
-                //         ),
-                //         isDense: true,
-                //         isExpanded: false,
-                //         alignment: Alignment.center,
-                //         // elevation: -30,
-                //         value: dropvalue,
-                //         icon: Icon(Icons.keyboard_arrow_down),
-                //         items: items.map((String items) {
-                //           return DropdownMenuItem(
-                //             value: items,
-                //             child: Text(
-                //               items,
-                //               style: const TextStyle(
-                //                 fontSize: 14,
-                //               ),
-                //             ),
-                //           );
-                //         }).toList(),
-                //         onChanged: (String? newValue) {
-                //           setState(() {
-                //             dropvalue = newValue!;
-                //           });
-                //         },
-                //         buttonPadding:
-                //             const EdgeInsets.only(left: 14, right: 14),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                GestureDetector(
+                  onTap: () {
+                    // setState(() {
+                    //   community_id = communityList[0].id;
+                    // });
+
+                    getCommunityList();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(),
+                    child: Container(
+                      margin: EdgeInsets.all(19),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 220, 217, 217),
+                        border: Border.all(width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: 300,
+                      height: 40,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Select Community',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
+                              Icon(Icons.arrow_drop_down)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // setState(() {
+                    //   community_id = communityList[0].id;
+                    // });
+
+                    getAllCommunityList();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(),
+                    child: Container(
+                      margin: EdgeInsets.all(19),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 220, 217, 217),
+                        border: Border.all(width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: 300,
+                      height: 40,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'View All Communities',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
+                              Icon(Icons.arrow_drop_down)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 GestureDetector(
                   onTap: () => _showChoiceDialog(context),
                   child: ClipRRect(
@@ -190,7 +223,7 @@ class _CreatePostState extends State<CreatePost> {
                     if (formKey.currentState!.validate()) {
                       String name = nameController.text;
                       setState(() {
-                        community_id = communityList[0].id;
+                        community_id = allCommunityList[0].id;
                         print("Community:::::::::::::::::::::::::::" +
                             community_id);
                       });
@@ -225,7 +258,26 @@ class _CreatePostState extends State<CreatePost> {
                 SizedBox(
                   height: 10,
                 ),
-                ListView.builder(
+              ],
+            ),
+          ),
+        ));
+  }
+
+  _playlistModalBottomSheet(context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+                height: 600,
+                child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: communityList.length,
                     itemBuilder: (context, index) {
@@ -243,14 +295,45 @@ class _CreatePostState extends State<CreatePost> {
                           ),
                         ],
                       );
-                    }),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-        ));
+                    }));
+          });
+        });
+  }
+
+  _allCommunityModalBottomSheet(context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+                height: 600,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: allCommunityList.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              allCommunityList[index].community_name,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      );
+                    }));
+          });
+        });
   }
 
   // Future<void> _showChoiceDialog(BuildContext context) async {
@@ -459,20 +542,58 @@ class _CreatePostState extends State<CreatePost> {
     };
 
     var response = await http.get(
-        Uri.parse(
-          'http://spotify.bhattihospital.com/api/communityList',
-        ),
+        Uri.parse('http://spotify.bhattihospital.com/api/communityList'),
         headers: header);
     if (response.statusCode == 200) {
       setState(() {
         var jsonBody = json.decode(response.body);
-        for (int i = 0; i < jsonBody['message'].length; i++) {
-          communityList.add(CommunityModel(
-            id: jsonBody['message'][i]['id'].toString(),
-            community_name: jsonBody['message'][i]['community_name'].toString(),
-          ));
-        }
-        setState(() {});
+
+        setState(() {
+          for (int i = 0; i < jsonBody['message'].length; i++) {
+            communityList.add(CommunityModel(
+              id: jsonBody['message'][i]['id'].toString(),
+              community_name:
+                  jsonBody['message'][i]['community_name'].toString(),
+            ));
+          }
+        });
+        _playlistModalBottomSheet(context);
+      });
+    }
+  }
+
+  void getAllCommunityList() async {
+    if (allCommunityList.isNotEmpty) {
+      allCommunityList.clear();
+    }
+    print("POST FUNCTION CALLED:::::::::::::::::::::::::::" + userModel.token);
+    Map<String, String> header = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      "Authorization": "Bearer " + userModel.token
+    };
+
+    var response = await http.get(
+        Uri.parse('http://spotify.bhattihospital.com/api/allCommunity'),
+        headers: header);
+    if (response.statusCode == 200) {
+      setState(() {
+        var jsonBody = json.decode(response.body);
+
+        setState(() {
+          for (int i = 0; i < jsonBody['message'].length; i++) {
+            allCommunityList.add(AllCommunityModel(
+              id: jsonBody['message'][i]['id'].toString(),
+              interest_id: jsonBody['message'][i]['interest_id'].toString(),
+              user_id: jsonBody['message'][i]['user_id'].toString(),
+              community_name:
+                  jsonBody['message'][i]['community_name'].toString(),
+              created_at: jsonBody['message'][i]['created_at'].toString(),
+              updated_at: jsonBody['message'][i]['updated_at'].toString(),
+            ));
+          }
+        });
+        _allCommunityModalBottomSheet(context);
       });
     }
   }
