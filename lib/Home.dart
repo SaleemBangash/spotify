@@ -91,7 +91,28 @@ class _HomeState extends State<Home> {
                         children: [
                           Row(
                             children: [
-                              // Image.network(postList[index].image),
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(shape: BoxShape.circle
+                                    // image: DecorationImage(
+                                    //   image:
+                                    //       const AssetImage('assets/images/john.jpg'),
+                                    //   fit: BoxFit.fill,
+                                    // ),
+                                    ),
+                                child: ClipOval(
+                                  child: Image.network(
+                                    postList[index].image,
+                                    // width: 70.0,
+                                    // height: 70.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
                               Text(postList[index].name,
                                   style: TextStyle(
                                       fontSize: 20,
@@ -161,10 +182,11 @@ class _HomeState extends State<Home> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.asset(
-                        "assets/house.jpg",
-                        // height: 60,
-                        // width: 60,
+                      child: Image.network(
+                        postList[index].postImage,
+                        // width: 70.0,
+                        // height: 70.0,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     Row(
@@ -693,20 +715,18 @@ class _HomeState extends State<Home> {
         headers: header);
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
-
-      setState(() {
-        for (int i = 0; i < jsonBody['message'].length; i++) {
-          postList.add(PostModel(
-              id: jsonBody['message'][i]['id'].toString(),
-              userID: jsonBody['message'][i]['user_id'].toString(),
-              postImage: jsonBody['message'][i]['postImage'].toString(),
-              description: jsonBody['message'][i]['description'].toString(),
-              date: jsonBody['message'][i]['date'].toString(),
-              time: jsonBody['message'][i]['time'].toString(),
-              name: jsonBody['message'][i]['name'].toString(),
-              image: jsonBody['message'][i]['image'].toString()));
-        }
-      });
+      for (int i = 0; i < jsonBody['message'].length; i++) {
+        postList.add(PostModel(
+            id: jsonBody['message'][i]['id'].toString(),
+            userID: jsonBody['message'][i]['user_id'].toString(),
+            postImage: jsonBody['message'][i]['postImage'].toString(),
+            description: jsonBody['message'][i]['description'].toString(),
+            date: jsonBody['message'][i]['date'].toString(),
+            time: jsonBody['message'][i]['time'].toString(),
+            name: jsonBody['message'][i]['name'].toString(),
+            image: jsonBody['message'][i]['image'].toString()));
+      }
+      setState(() {});
     }
   }
 
@@ -898,6 +918,7 @@ class _HomeState extends State<Home> {
       Navigator.of(context).pop();
     }
   }
+
   // void showLongToast() {
   //   Fluttertoast.showToast(
   //     msg: "This is Long Toast",

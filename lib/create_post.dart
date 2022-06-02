@@ -73,192 +73,223 @@ class _CreatePostState extends State<CreatePost> {
         body: SingleChildScrollView(
           child: Form(
             key: formKey,
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // setState(() {
-                    //   community_id = communityList[0].id;
-                    // });
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     // setState(() {
+                  //     //   community_id = communityList[0].id;
+                  //     // });
 
-                    getCommunityList();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(),
-                    child: Container(
-                      margin: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 220, 217, 217),
-                        border: Border.all(width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      width: 300,
-                      height: 40,
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Select Community',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                ),
-                              ),
-                              Icon(Icons.arrow_drop_down)
-                            ],
-                          ),
+                  //     getCommunityList();
+                  //   },
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(),
+                  //     child: Container(
+                  //       margin: EdgeInsets.all(19),
+                  //       decoration: BoxDecoration(
+                  //         color: Color.fromARGB(255, 220, 217, 217),
+                  //         border: Border.all(width: 1),
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       ),
+                  //       width: 300,
+                  //       height: 40,
+                  //       child: Center(
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text(
+                  //                 'Select Community',
+                  //                 style: TextStyle(
+                  //                   fontSize: 14,
+                  //                   color: Color.fromARGB(255, 0, 0, 0),
+                  //                 ),
+                  //               ),
+                  //               Icon(Icons.arrow_drop_down)
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     // setState(() {
+                  //     //   community_id = communityList[0].id;
+                  //     // });
+
+                  //     getAllCommunityList();
+                  //   },
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(),
+                  //     child: Container(
+                  //       margin: EdgeInsets.all(19),
+                  //       decoration: BoxDecoration(
+                  //         color: Color.fromARGB(255, 220, 217, 217),
+                  //         border: Border.all(width: 1),
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       ),
+                  //       width: 300,
+                  //       height: 40,
+                  //       child: Center(
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               GestureDetector(
+                  //                 child: Text(
+                  //                   'View All Communities',
+                  //                   style: TextStyle(
+                  //                     fontSize: 14,
+                  //                     color: Color.fromARGB(255, 0, 0, 0),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //               Icon(Icons.arrow_drop_down)
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
+                  GestureDetector(
+                    onTap: () => _showChoiceDialog(context),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          // shape: BoxShape.circle,
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // setState(() {
-                    //   community_id = communityList[0].id;
-                    // });
-
-                    getAllCommunityList();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(),
-                    child: Container(
-                      margin: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 220, 217, 217),
-                        border: Border.all(width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      width: 300,
-                      height: 40,
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'View All Communities',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 0, 0, 0),
+                        width: 300.0,
+                        height: 330.0,
+                        // color: Colors.green,
+                        child: (imageFile == null)
+                            ? Container(
+                                width: 300.0,
+                                height: 370.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  // shape: BoxShape.circle,
                                 ),
+                                child: Icon(Icons.upload),
+                              )
+                            // Text("Choose Image")
+                            : Image.file(
+                                File(imageFile!.path),
+                                // width: 290,
+                                // height: 120,
+                                fit: BoxFit.cover,
                               ),
-                              Icon(Icons.arrow_drop_down)
-                            ],
-                          ),
-                        ),
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () => _showChoiceDialog(context),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        // shape: BoxShape.circle,
-                      ),
-                      width: 300.0,
-                      height: 330.0,
-                      // color: Colors.green,
-                      child: (imageFile == null)
-                          ? Container(
-                              width: 300.0,
-                              height: 370.0,
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(10.0),
-                                // shape: BoxShape.circle,
-                              ),
-                              child: Icon(Icons.upload),
-                            )
-                          // Text("Choose Image")
-                          : Image.file(
-                              File(imageFile!.path),
-                              // width: 290,
-                              // height: 120,
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                    width: 290,
-                    height: 90,
-                    child: TextFormField(
-                      controller: nameController,
-                      validator: (name) => name!.isEmpty ? 'Required' : null,
-                      style: TextStyle(height: 1.5),
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 2.0),
-                              borderRadius: BorderRadius.circular(15)),
-                          hintText: "Add Some Text",
-                          filled: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10)),
-                      keyboardType: TextInputType.text,
-                      maxLines: 5,
-                    )),
-                SizedBox(
-                  height: 20,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    if (formKey.currentState!.validate()) {
-                      String name = nameController.text;
-                      setState(() {
-                        community_id = allCommunityList[0].id;
-                        print("Community:::::::::::::::::::::::::::" +
-                            community_id);
-                      });
+                  SizedBox(
+                      width: 290,
+                      height: 90,
+                      child: TextFormField(
+                        controller: descController,
+                        validator: (desc) => desc!.isEmpty ? 'Required' : null,
+                        style: TextStyle(height: 1.5),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.black, width: 2.0),
+                                borderRadius: BorderRadius.circular(15)),
+                            hintText: "Add home",
+                            filled: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10)),
+                        keyboardType: TextInputType.text,
+                        maxLines: 5,
+                      )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                      width: 290,
+                      height: 90,
+                      child: TextFormField(
+                        controller: nameController,
+                        validator: (name) => name!.isEmpty ? 'Required' : null,
+                        style: TextStyle(height: 1.5),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.black, width: 2.0),
+                                borderRadius: BorderRadius.circular(15)),
+                            hintText: "Add Some Text",
+                            filled: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10)),
+                        keyboardType: TextInputType.text,
+                        maxLines: 5,
+                      )),
 
-                      // String imageFile = PickedFile.imageFile;
-                      if (imageFile == null) {
-                        // registerUser(community_id, nameController.text);
-                      } else {
-                        updateProfileData();
-                        registerUser(community_id, nameController.text);
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (formKey.currentState!.validate()) {
+                        String desc = descController.text;
+                        String name = nameController.text;
+
+                        setState(() {
+                          community_id = descController.text;
+                          print("Community:::::::::::::::::::::::::::" +
+                              community_id);
+                        });
+
+                        // String imageFile = PickedFile.imageFile;
+                        if (imageFile == null) {
+                          // registerUser(community_id, nameController.text);
+                        } else {
+                          updateProfileData();
+                          // registerUser(community_id, nameController.text);
+                        }
                       }
-                    }
-                    print(community_id);
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 180,
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey,
-                      borderRadius: new BorderRadius.circular(10.0),
+                      print(community_id);
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 180,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey,
+                        borderRadius: new BorderRadius.circular(10.0),
+                      ),
+                      child: Center(
+                          child: Text(
+                        "Submit",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.normal,
+                            color: Colors.white),
+                      )),
                     ),
-                    child: Center(
-                        child: Text(
-                      "Submit",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white),
-                    )),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
+                  SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
             ),
           ),
         ));
@@ -288,9 +319,20 @@ class _CreatePostState extends State<CreatePost> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              communityList[index].community_name,
-                              style: TextStyle(color: Colors.black),
+                            child: GestureDetector(
+                              onTap: () {
+                                // setState(() {
+                                //   community_id = communityList[index].id;
+                                //   print(
+                                //       "Community_id:::::::::::::::::::::::::::" +
+                                //           community_id);
+                                // });
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                communityList[index].community_name,
+                                style: TextStyle(color: Colors.black),
+                              ),
                             ),
                           ),
                         ],
@@ -405,93 +447,94 @@ class _CreatePostState extends State<CreatePost> {
     Navigator.pop(context);
   }
 
-  registerUser(
-    String community_id,
-    String description,
-  ) async {
-    print("Called ::::::::::::::::::::::::::::::::::::::");
+  // registerUser(
+  //   String community_id,
+  //   String description,
+  // ) async {
+  //   print("Called ::::::::::::::::::::::::::::::::::::::");
 
-    Map<String, String> header = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      "Authorization": "Bearer " + userModel.token
-    };
+  //   Map<String, String> header = {
+  //     'Content-type': 'application/json',
+  //     'Accept': 'application/json',
+  //     "Authorization": "Bearer " + userModel.token
+  //   };
 
-    Map<String, dynamic> registerMap = {
-      // "image": imageFile,
-      "community_id": community_id,
-      "description": description,
-    };
+  //   Map<String, dynamic> registerMap = {
+  //     // "image": imageFile,
+  //     "community_id": community_id,
+  //     "description": description,
+  //   };
 
-    var url = Uri.parse('http://spotify.bhattihospital.com/api/savePost');
+  //   var url = Uri.parse('http://spotify.bhattihospital.com/api/savePost');
 
-    var response =
-        await http.post(url, body: jsonEncode(registerMap), headers: header);
-    if (response.statusCode == 200) {
-      print('IF:::' + response.body);
-      var responseBody = json.decode(response.body);
-      if (responseBody['success']) {
-        /// navigate to login screen
-        print('Post Created:::::::::::::::' + responseBody['message']);
-        showDialog(
-          barrierDismissible: true,
-          // barrierColor: Theme.of(context).primaryColor,
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0)), //this right here,
-              backgroundColor: Colors.white,
-              content: Container(
-                height: 50,
-                child: Center(
-                  child: Text(responseBody['message'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.black, fontSize: 15)),
-                ),
-              ),
-            );
-          },
-        );
-        // _scaffoldKey.currentState!.showSnackBar(SnackBar(
-        //   content: Text("Profile Updated"),
-        // ));
-        // Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) => (UpdateProfile())));
-        nameController.clear();
-        setState(() {
-          // communityList[0].community_name = community_name;
-          // profileList[0].email = email;
-          // profileList[0].bio = bio;
-        });
-      } else {
-        // showDialog(
-        //   barrierDismissible: true,
-        //   // barrierColor: Theme.of(context).primaryColor,
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return AlertDialog(
-        //       shape: RoundedRectangleBorder(
-        //           borderRadius: BorderRadius.circular(15.0)), //this right here,
-        //       backgroundColor: Colors.white,
-        //       content: Container(
-        //         height: 50,
-        //         child: Center(
-        //           child: Text("Profile Not Updated",
-        //               textAlign: TextAlign.center,
-        //               style: TextStyle(color: Colors.black, fontSize: 15)),
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // );
+  //   var response =
+  //       await http.post(url, body: jsonEncode(registerMap), headers: header);
+  //   if (response.statusCode == 200) {
+  //     print('IF:::' + response.body);
+  //     var responseBody = json.decode(response.body);
+  //     if (responseBody['success']) {
+  //       /// navigate to login screen
+  //       print('Post Created:::::::::::::::' + responseBody['message']);
+  //       showDialog(
+  //         barrierDismissible: true,
+  //         // barrierColor: Theme.of(context).primaryColor,
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return AlertDialog(
+  //             shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(15.0)), //this right here,
+  //             backgroundColor: Colors.white,
+  //             content: Container(
+  //               height: 50,
+  //               child: Center(
+  //                 child: Text(responseBody['message'],
+  //                     textAlign: TextAlign.center,
+  //                     style: TextStyle(color: Colors.black, fontSize: 15)),
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       );
+  //       // _scaffoldKey.currentState!.showSnackBar(SnackBar(
+  //       //   content: Text("Profile Updated"),
+  //       // ));
+  //       // Navigator.push(context,
+  //       //     MaterialPageRoute(builder: (context) => (UpdateProfile())));
+  //       nameController.clear();
+  //       descController.clear();
+  //       // setState(() {
+  //       //   // communityList[0].community_name = community_name;
+  //       //   // profileList[0].email = email;
+  //       //   // profileList[0].bio = bio;
+  //       // });
+  //     } else {
+  //       // showDialog(
+  //       //   barrierDismissible: true,
+  //       //   // barrierColor: Theme.of(context).primaryColor,
+  //       //   context: context,
+  //       //   builder: (BuildContext context) {
+  //       //     return AlertDialog(
+  //       //       shape: RoundedRectangleBorder(
+  //       //           borderRadius: BorderRadius.circular(15.0)), //this right here,
+  //       //       backgroundColor: Colors.white,
+  //       //       content: Container(
+  //       //         height: 50,
+  //       //         child: Center(
+  //       //           child: Text("Profile Not Updated",
+  //       //               textAlign: TextAlign.center,
+  //       //               style: TextStyle(color: Colors.black, fontSize: 15)),
+  //       //         ),
+  //       //       ),
+  //       //     );
+  //       //   },
+  //       // );
 
-        print('MESSAGE:::::::' + responseBody['message']);
-      }
-    } else {
-      print('ELSE::something went wrong:' + response.statusCode.toString());
-    }
-  }
+  //       print('MESSAGE:::::::' + responseBody['message']);
+  //     }
+  //   } else {
+  //     print('ELSE::something went wrong:' + response.statusCode.toString());
+  //   }
+  // }
 
   void updateProfileData() async {
     String path = imageFile!.path;
@@ -504,7 +547,8 @@ class _CreatePostState extends State<CreatePost> {
     };
     Map<String, String> registerMap = {
       // "image": imageFile,
-      "name": nameController.text,
+      "community_id": descController.text,
+      "description": nameController.text,
     };
 
     var request = http.MultipartRequest(
@@ -522,7 +566,6 @@ class _CreatePostState extends State<CreatePost> {
     final respStr = await response.stream.bytesToString();
     var jsonData = jsonDecode(respStr);
     if (response.statusCode == 200) {
-      // success
       print("PROFILE IMAGE UPDATED:::::::::::::::::::::::::::::::");
     } else {
       // error

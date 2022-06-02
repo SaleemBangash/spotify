@@ -13,7 +13,7 @@ import '../models/user_post_model.dart';
 
 late UserModel userModel;
 // List<PostModel> postList = [];
-List<UserPostModel> userspostList = [];
+
 List<InterestModel> interestList = [];
 List<ProfileModel> profileList = [];
 

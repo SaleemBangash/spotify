@@ -43,6 +43,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   bool _isEnable = false;
   bool _atEnable = false;
   bool _onEnable = false;
+  List<UserPostModel> userspostList = [];
 
   String Ftitle = "Azan Malik";
   String title = "Ali";
@@ -99,214 +100,206 @@ class _UpdateProfileState extends State<UpdateProfile> {
           : Column(
               children: [
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: profileList.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(shape: BoxShape.circle
-                                  // image: DecorationImage(
-                                  //   image:
-                                  //       const AssetImage('assets/images/john.jpg'),
-                                  //   fit: BoxFit.fill,
-                                  // ),
-                                  ),
-                              child: ClipOval(
-                                child: Image.network(
-                                  profileList[index].image,
-                                  // width: 70.0,
-                                  // height: 70.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              profileList[index].name,
-                              style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Personal Information",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  IconButton(
-                                      icon: Icon(Icons.edit),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    profile()));
-                                      })
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Name",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  // IconButton(
-                                  //     icon: Icon(Icons.edit),
-                                  //     onPressed: () {
-                                  //       Navigator.of(context).push(MaterialPageRoute(
-                                  //           builder: (context) => profile()));
-                                  //       // setState(() {
-                                  //       //   _isEnable = true;
-                                  //       // });
-                                  //     })
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  profileList[index].name,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Email",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  // IconButton(
-                                  //     icon: Icon(Icons.edit),
-                                  //     onPressed: () {
-                                  //       setState(() {
-                                  //         _isEnable = true;
-                                  //       });
-                                  //     })
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  profileList[index].email,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Bio",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  // IconButton(
-                                  //     icon: Icon(Icons.edit),
-                                  //     onPressed: () {
-                                  //       setState(() {
-                                  //         _isEnable = true;
-                                  //       });
-                                  //     })
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  profileList[index].bio,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
+                Column(
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(shape: BoxShape.circle
+                          // image: DecorationImage(
+                          //   image:
+                          //       const AssetImage('assets/images/john.jpg'),
+                          //   fit: BoxFit.fill,
+                          // ),
+                          ),
+                      child: ClipOval(
+                        child: Image.network(
+                          profileList[0].image,
+                          // width: 70.0,
+                          // height: 70.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      profileList[0].name,
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Personal Information",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => profile()));
+                              })
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Name",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          // IconButton(
+                          //     icon: Icon(Icons.edit),
+                          //     onPressed: () {
+                          //       Navigator.of(context).push(MaterialPageRoute(
+                          //           builder: (context) => profile()));
+                          //       // setState(() {
+                          //       //   _isEnable = true;
+                          //       // });
+                          //     })
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          profileList[0].name,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Email",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          // IconButton(
+                          //     icon: Icon(Icons.edit),
+                          //     onPressed: () {
+                          //       setState(() {
+                          //         _isEnable = true;
+                          //       });
+                          //     })
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          profileList[0].email,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Bio",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          // IconButton(
+                          //     icon: Icon(Icons.edit),
+                          //     onPressed: () {
+                          //       setState(() {
+                          //         _isEnable = true;
+                          //       });
+                          //     })
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          profileList[0].bio,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+
+                // Expanded(
+                //   child: ListView.builder(
+                //       shrinkWrap: true,
+                //       itemCount: profileList.length,
+                //       itemBuilder: (context, index) {
+                //         return
+
+                //       }),
+                // ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 userspostList.isEmpty
                     ? Center(child: Text("No Posts"))
                     : Expanded(
                         child: ListView.builder(
+                          shrinkWrap: true,
                           itemCount: userspostList.length,
                           itemBuilder: (context, index) {
                             return Column(
@@ -320,7 +313,29 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     children: [
                                       Row(
                                         children: [
-                                          // Image.network(postList[index].image),
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle
+                                                // image: DecorationImage(
+                                                //   image:
+                                                //       const AssetImage('assets/images/john.jpg'),
+                                                //   fit: BoxFit.fill,
+                                                // ),
+                                                ),
+                                            child: ClipOval(
+                                              child: Image.network(
+                                                userspostList[index].image,
+                                                // width: 70.0,
+                                                // height: 70.0,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
                                           Text(userspostList[index].name,
                                               style: TextStyle(
                                                   fontSize: 20,
@@ -398,10 +413,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
-                                  child: Image.asset(
-                                    "assets/house.jpg",
-                                    // height: 60,
-                                    // width: 60,
+                                  child: Image.network(
+                                    userspostList[index].postImage,
+                                    // width: 70.0,
+                                    // height: 70.0,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Row(
@@ -1391,6 +1407,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               name: jsonBody['profile']['posts'][i]['name'].toString(),
               image: jsonBody['profile']['posts'][i]['image'].toString()));
         }
+        setState(() {});
       });
     }
   }
