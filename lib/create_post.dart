@@ -566,7 +566,29 @@ class _CreatePostState extends State<CreatePost> {
     final respStr = await response.stream.bytesToString();
     var jsonData = jsonDecode(respStr);
     if (response.statusCode == 200) {
+      showDialog(
+          barrierDismissible: true,
+          // barrierColor: Theme.of(context).primaryColor,
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0)), //this right here,
+              backgroundColor: Colors.white,
+              content: Container(
+                height: 50,
+                child: Center(
+                  child: Text("Post Created Successfuly",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.black, fontSize: 15)),
+                ),
+              ),
+            );
+          });
+
       print("PROFILE IMAGE UPDATED:::::::::::::::::::::::::::::::");
+      nameController.clear();
+      descController.clear();
     } else {
       // error
       print("PROFILE IMAGE NOT UPDATED:::::::::::::::::::::::::::::::");
