@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:spotify/bottom_bar.dart';
+import 'package:spotify/create_community_post.dart';
 
 import 'package:spotify/login.dart';
+import 'package:spotify/show_community_post.dart';
 import 'package:spotify/variables/variables.dart';
 
 import 'Community.dart';
@@ -58,12 +60,12 @@ class _interestedsportsState extends State<interestedsports> {
           ),
         ),
         body: interestList.isEmpty
-            ? CircularProgressIndicator()
+            ? Center(child: CircularProgressIndicator())
             : Center(
                 child: Padding(
                     padding: const EdgeInsets.only(top: 50),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
@@ -198,56 +200,98 @@ class _interestedsportsState extends State<interestedsports> {
                         SizedBox(
                           height: 20,
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => (BottomBar())));
-                            print(intrestID);
-                            saveInterest(intrestID);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 180,
-                            decoration: BoxDecoration(
-                              color: Colors.orangeAccent,
-                              borderRadius: new BorderRadius.circular(10.0),
-                            ),
-                            child: Center(
+                        Container(),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => (BottomBar())));
+                                  print(intrestID);
+                                  saveInterest(intrestID);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 180,
+                                  decoration: BoxDecoration(
+                                    color: Colors.orangeAccent,
+                                    borderRadius:
+                                        new BorderRadius.circular(10.0),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    "Ok",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 17,
+                                        color: Colors.white),
+                                  )),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Community(
+                                                interest_id: interestList[0].id,
+                                              )));
+                                },
                                 child: Text(
-                              "Ok",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.normal,
-                                  fontSize: 17,
-                                  color: Colors.white),
-                            )),
+                                  "Create Community",
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      fontStyle: FontStyle.normal,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CreateCommunityPost()));
+                                },
+                                child: Text(
+                                  "Create Community Post",
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      fontStyle: FontStyle.normal,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     // Navigator.push(
+                              //     //     context,
+                              //     //     MaterialPageRoute(
+                              //     //         builder: (context) => ShowCommunityPost()));
+                              //   },
+                              //   child: Text(
+                              //     "Show Community Post",
+                              //     style: TextStyle(
+                              //         fontSize: 17.0,
+                              //         fontStyle: FontStyle.normal,
+                              //         color: Colors.black),
+                              //   ),
+                              // ),
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Community(
-                                          interest_id: interestList[0].id,
-                                        )));
-                          },
-                          child: Text(
-                            "Create Community",
-                            style: TextStyle(
-                                fontSize: 17.0,
-                                fontStyle: FontStyle.normal,
-                                color: Colors.black),
-                          ),
-                        ),
+                        )
                       ],
 
                       // Column(

@@ -14,9 +14,11 @@ import 'models/new_chat_model.dart';
 import 'variables/variables.dart';
 
 class chatt extends StatefulWidget {
-  String receiver_id;
+  // String receiver_id;
 
-  chatt({Key? key, required this.receiver_id}) : super(key: key);
+  chatt({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<chatt> createState() => _chattState();
@@ -35,7 +37,7 @@ class _chattState extends State<chatt> {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-  String receiver_id = '';
+  // String receiver_id = '';
   String uname = '';
   List<NewChatModel> newchatList = [];
 
@@ -43,7 +45,7 @@ class _chattState extends State<chatt> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    showpostcomments(widget.receiver_id);
+    showpostcomments(receiverr_id);
   }
 
   @override
@@ -70,11 +72,15 @@ class _chattState extends State<chatt> {
               padding: const EdgeInsets.only(right: 20),
               child: GestureDetector(
                   onTap: () {
+                    // userName = chatList[0].name;
+                    // // receiver_id = chatList[index].reciever_id;
+                    print("Reciever id::::::::;:" + receiverr_id);
+                    // print("conn nmbr::::::::;:" + chatList[0].name);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                (MakeOffer(receiver_id: widget.receiver_id))));
+                                (MakeOffer(receiver_id: message_id))));
                   },
                   child:
                       Icon(FontAwesomeIcons.plusCircle, color: Colors.white)),
@@ -168,17 +174,17 @@ class _chattState extends State<chatt> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    chatList[0].name,
-                                    style: TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
+                                  // Text(
+                                  //   newchatList[0].,
+                                  //   style: TextStyle(
+                                  //       fontSize: 15.0,
+                                  //       fontWeight: FontWeight.bold,
+                                  //       color: Colors.black),
+                                  // ),
                                   Text(
                                     newchatList[index].time,
                                     style: TextStyle(
-                                        fontSize: 15.0,
+                                        fontSize: 10.0,
                                         color: Color.fromRGBO(0, 0, 0, 1)),
                                   ),
                                   Container(
@@ -218,9 +224,8 @@ class _chattState extends State<chatt> {
                           if (formKey.currentState!.validate()) {
                             // String comment = nameController.text;
                             // String email = emailController.text;
-                            registerUser(
-                                widget.receiver_id, nameController.text);
-                            print(widget.receiver_id);
+                            registerUser(message_id, nameController.text);
+                            print(message_id);
                           }
                           print(nameController.text);
                         },
@@ -245,7 +250,7 @@ class _chattState extends State<chatt> {
         ));
   }
 
-  registerUser(String receiver_id, String message) async {
+  registerUser(String messageId, String message) async {
     print("Chat Called ::::::::::::::::::::::::::::::::::::::");
     Map<String, String> header = {
       'Content-type': 'application/json',
@@ -253,7 +258,7 @@ class _chattState extends State<chatt> {
       "Authorization": "Bearer " + userModel.token
     };
     Map<String, dynamic> chatMap = {
-      "receiver_id": receiver_id,
+      "receiver_id": messageId,
       "message": message,
     };
 
@@ -266,7 +271,8 @@ class _chattState extends State<chatt> {
       var responseBody = json.decode(response.body);
       if (responseBody['message'] == 'Message send successfully') {
         //newchatList.add(NewChatModel(id: id, send_id: send_id, receiver_id: receiver_id, message: message, time: time, status: status, created_at: created_at, updated_at: updated_at));
-        Navigator.of(context).pop();
+        Navigator.push(
+            context, MaterialPageRoute(builder: ((context) => BottomBar())));
 
         /// navigate to login screen
         print('MESSAGE:::::::' + responseBody['message']);
@@ -276,9 +282,9 @@ class _chattState extends State<chatt> {
     }
   }
 
-  showpostcomments(String receiver_id) async {
-    if (commentList.isNotEmpty) {
-      commentList.clear();
+  showpostcomments(String recieverId) async {
+    if (chatList.isNotEmpty) {
+      chatList.clear();
     }
 
     print("Called ::::::::::::::::::::::::::::::::::::::");
@@ -292,8 +298,7 @@ class _chattState extends State<chatt> {
     // };
 
     var url = Uri.parse(
-        'http://spotify.bhattihospital.com/api/ViewConversation/' +
-            receiver_id);
+        'http://spotify.bhattihospital.com/api/ViewConversation/' + recieverId);
 
     var response = await http.get(url, headers: header);
     if (response.statusCode == 200) {
@@ -309,6 +314,7 @@ class _chattState extends State<chatt> {
               message: responseBody['message'][i]['message'].toString(),
               time: responseBody['message'][i]['time'].toString(),
               status: responseBody['message'][i]['status'].toString(),
+              con_number: responseBody['message'][i]['con_number'].toString(),
               created_at: responseBody['message'][i]['created_at'].toString(),
               updated_at: responseBody['message'][i]['updated_at'].toString()));
         }

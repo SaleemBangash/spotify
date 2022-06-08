@@ -59,14 +59,18 @@ class _NewcChatState extends State<NewcChat> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              print(chatList[index].reciever_id);
+                              print(chatList[index].con_number);
+                              // message_id = chatList[index].con_number;
+                              userName = chatList[index].name;
+                              message_id = chatList[index].reciever_id;
+                              receiverr_id = chatList[index].con_number;
+                              // print("Reciever id::::::::;:" + message_id);
+                              // print("conn nmbr::::::::;:" +
+                              //     chatList[index].con_number);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => (chatt(
-                                            receiver_id:
-                                                chatList[index].reciever_id,
-                                          ))));
+                                      builder: (context) => (chatt())));
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -165,7 +169,7 @@ class _NewcChatState extends State<NewcChat> {
                                               ),
                                           child: ClipOval(
                                             child: Image.network(
-                                              chatList[0].image,
+                                              chatList[index].image,
                                               // width: 70.0,
                                               // height: 70.0,
                                               fit: BoxFit.cover,
@@ -450,16 +454,16 @@ class _NewcChatState extends State<NewcChat> {
       print(":::;;;::::;:::::::");
       print(jsonBody["users"][0]["reciever_id"]);
       print(":::;;;::::;:::::::");
-      setState(() {
-        for (int i = 0; i < jsonBody['users'].length; i++) {
-          chatList.add(ChatModel(
-              send_id: jsonBody['users'][i]['send_id'].toString(),
-              reciever_id: jsonBody['users'][i]['reciever_id'].toString(),
-              status: jsonBody['users'][i]['status'].toString(),
-              name: jsonBody['users'][i]['name'].toString(),
-              image: jsonBody['users'][i]['image'].toString()));
-        }
-      });
+      for (int i = 0; i < jsonBody['users'].length; i++) {
+        chatList.add(ChatModel(
+            con_number: jsonBody['users'][i]['con_number'].toString(),
+            send_id: jsonBody['users'][i]['send_id'].toString(),
+            reciever_id: jsonBody['users'][i]['reciever_id'].toString(),
+            status: jsonBody['users'][i]['status'].toString(),
+            name: jsonBody['users'][i]['name'].toString(),
+            image: jsonBody['users'][i]['image'].toString()));
+      }
+      setState(() {});
     }
   }
 

@@ -11,6 +11,7 @@ import 'variables/variables.dart';
 
 class MakeOffer extends StatefulWidget {
   String receiver_id;
+
   MakeOffer({Key? key, required this.receiver_id}) : super(key: key);
 
   @override
@@ -21,6 +22,7 @@ class _MakeOfferState extends State<MakeOffer> {
   var amountController = TextEditingController();
   var descController = TextEditingController();
   var formKey = GlobalKey<FormState>();
+  // String userName = chatList[0].name;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class _MakeOfferState extends State<MakeOffer> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Azan Malik",
+                        userName,
                         style: TextStyle(
                             fontSize: 23.0,
                             fontStyle: FontStyle.normal,
@@ -165,10 +167,7 @@ class _MakeOfferState extends State<MakeOffer> {
                           print(
                             descController.text,
                           );
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => BottomBar())));
+                          Navigator.of(context).pop();
                         },
                         child: Container(
                           height: 40,

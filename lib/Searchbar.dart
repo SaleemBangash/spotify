@@ -7,6 +7,7 @@ import 'package:spotify/Chattroom.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotify/models/search_model.dart';
 import 'package:spotify/sportsinterest.dart';
+import 'package:spotify/view_profile.dart';
 
 import 'variables/variables.dart';
 
@@ -87,66 +88,103 @@ class _SearchBarState extends State<SearchBar> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: 90,
-                            width: 170,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(width: 1)),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      searchList[index].image.toString() ==
-                                              'null'
-                                          ? ClipOval(
-                                              child: Image.asset(
-                                                "assets/download.png",
-                                                width: 50,
-                                                height: 50,
+                          child: GestureDetector(
+                            onTap: () {
+                              // userSearch_id = searchList[0].id;
+                              // // receiver_id = chatList[index].reciever_id;
+                              // // print("Reciever id::::::::;:" + receiver_id);
+                              // print("conn nmbr::::::::;:" + userSearch_id);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => (ViewProfile(
+                                            userSearch_id: searchList[index].id,
+                                          ))));
+                            },
+                            child: Container(
+                              height: 90,
+                              width: 170,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(width: 1)),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        searchList[index].image.toString() ==
+                                                'null'
+                                            ? ClipOval(
+                                                child: Image.asset(
+                                                  "assets/download.png",
+                                                  width: 50,
+                                                  height: 50,
+                                                ),
+                                              )
+                                            : ClipOval(
+                                                child: Image.network(
+                                                  searchList[index].image,
+                                                  fit: BoxFit.cover,
+                                                  width: 40,
+                                                  height: 40,
+                                                ),
                                               ),
-                                            )
-                                          : ClipOval(
-                                              child: Image.network(
-                                                searchList[index].image,
-                                                fit: BoxFit.cover,
-                                                width: 40,
-                                                height: 40,
+                                        Text(
+                                          searchList[index].name,
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              // String comment = nameController.text;
+                                              // String email = emailController.text;
+                                              registerUser(
+                                                  searchList[index].id);
+                                            }
+                                            print(follower_id);
+                                          },
+                                          child: Container(
+                                            height: 25,
+                                            width: 60,
+                                            decoration: BoxDecoration(
+                                              color: Colors.cyan,
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      5.0),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "connect",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.normal,
+                                                    color: Colors.white),
                                               ),
                                             ),
-                                      Text(
-                                        searchList[index].name,
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (formKey.currentState!
-                                              .validate()) {
-                                            // String comment = nameController.text;
-                                            // String email = emailController.text;
-                                            registerUser(searchList[index].id);
-                                          }
-                                          print(follower_id);
-                                        },
-                                        child: Container(
+                                          ),
+                                        ),
+                                        // SizedBox(
+                                        //   width: 40,
+                                        // ),
+                                        Container(
                                           height: 25,
                                           width: 60,
                                           decoration: BoxDecoration(
@@ -154,55 +192,31 @@ class _SearchBarState extends State<SearchBar> {
                                             borderRadius:
                                                 new BorderRadius.circular(5.0),
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                              "connect",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle: FontStyle.normal,
-                                                  color: Colors.white),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              message_id = searchList[index].id;
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          (chatt())));
+                                            },
+                                            child: Center(
+                                              child: Text(
+                                                "Message",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.normal,
+                                                    color: Colors.white),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      // SizedBox(
-                                      //   width: 40,
-                                      // ),
-                                      Container(
-                                        height: 25,
-                                        width: 60,
-                                        decoration: BoxDecoration(
-                                          color: Colors.cyan,
-                                          borderRadius:
-                                              new BorderRadius.circular(5.0),
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        (chatt(
-                                                          receiver_id:
-                                                              searchList[index]
-                                                                  .id,
-                                                        ))));
-                                          },
-                                          child: Center(
-                                            child: Text(
-                                              "Message",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle: FontStyle.normal,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -275,21 +289,40 @@ class _SearchBarState extends State<SearchBar> {
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
       print("RESPONSE DATA " + jsonBody.toString());
+      if (jsonBody['success']) {
+        for (int i = 0; i < jsonBody['users'].length; i++) {
+          searchList.add(SearchModel(
+              id: jsonBody['users'][i]['id'].toString(),
+              name: jsonBody['users'][i]['name'].toString(),
+              userName: jsonBody['users'][i]['userName'].toString(),
+              email: jsonBody['users'][i]['email'].toString(),
+              email_verified_at:
+                  jsonBody['users'][i]['email_verified_at'].toString(),
+              image: jsonBody['users'][i]['image'].toString(),
+              bio: jsonBody['users'][i]['bio'].toString(),
+              created_at: jsonBody['users'][i]['created_at'].toString(),
+              updated_at: jsonBody['users'][i]['updated_at'].toString()));
+        }
+        setState(() {});
 
-      for (int i = 0; i < jsonBody['users'].length; i++) {
-        searchList.add(SearchModel(
-            id: jsonBody['users'][i]['id'].toString(),
-            name: jsonBody['users'][i]['name'].toString(),
-            userName: jsonBody['users'][i]['userName'].toString(),
-            email: jsonBody['users'][i]['email'].toString(),
-            email_verified_at:
-                jsonBody['users'][i]['email_verified_at'].toString(),
-            image: jsonBody['users'][i]['image'].toString(),
-            bio: jsonBody['users'][i]['bio'].toString(),
-            created_at: jsonBody['users'][i]['created_at'].toString(),
-            updated_at: jsonBody['users'][i]['updated_at'].toString()));
+        // print('MESSAGE:::::::' + jsonBody['message']);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(jsonBody['message']),
+              );
+            });
       }
-      setState(() {});
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("No user Found"),
+            );
+          });
     }
   }
 }

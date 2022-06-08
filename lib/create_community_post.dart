@@ -10,7 +10,6 @@ import 'package:spotify/Editing_the_post.dart';
 import 'package:spotify/bottom_bar.dart';
 import 'package:spotify/login.dart';
 import 'package:spotify/profile.dart';
-import 'package:spotify/show_community_post.dart';
 import 'package:spotify/sportsinterest.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,18 +17,18 @@ import 'models/all_community_model.dart';
 import 'models/community_model.dart';
 import 'variables/variables.dart';
 
-class CreatePost extends StatefulWidget {
+class CreateCommunityPost extends StatefulWidget {
   // String community_id;
-  const CreatePost({
+  const CreateCommunityPost({
     Key? key,
     // required this.community_id,
   }) : super(key: key);
 
   @override
-  State<CreatePost> createState() => _CreatePostState();
+  State<CreateCommunityPost> createState() => _CreateCommunityPostState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _CreateCommunityPostState extends State<CreateCommunityPost> {
   String community_id = '';
   List<CommunityModel> communityList = [];
   String? dropvalue;
@@ -56,7 +55,8 @@ class _CreatePostState extends State<CreatePost> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Create Post", style: TextStyle(color: Colors.white)),
+          title: Text("Create Community Post",
+              style: TextStyle(color: Colors.white)),
           backgroundColor: Color(0xff272525),
           leading: GestureDetector(
             onTap: () {
@@ -82,90 +82,6 @@ class _CreatePostState extends State<CreatePost> {
                   SizedBox(
                     height: 10,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // setState(() {
-                      //   community_id = communityList[0].id;
-                      // });
-
-                      getCommunityList();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(),
-                      child: Container(
-                        margin: EdgeInsets.all(19),
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 220, 217, 217),
-                          border: Border.all(width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        width: 300,
-                        height: 40,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Select Community',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                  ),
-                                ),
-                                Icon(Icons.arrow_drop_down)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     // setState(() {
-                  //     //   community_id = communityList[0].id;
-                  //     // });
-
-                  //     getAllCommunityList();
-                  //   },
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(),
-                  //     child: Container(
-                  //       margin: EdgeInsets.all(19),
-                  //       decoration: BoxDecoration(
-                  //         color: Color.fromARGB(255, 220, 217, 217),
-                  //         border: Border.all(width: 1),
-                  //         borderRadius: BorderRadius.circular(10),
-                  //       ),
-                  //       width: 300,
-                  //       height: 40,
-                  //       child: Center(
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               GestureDetector(
-                  //                 child: Text(
-                  //                   'View All Communities',
-                  //                   style: TextStyle(
-                  //                     fontSize: 14,
-                  //                     color: Color.fromARGB(255, 0, 0, 0),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //               Icon(Icons.arrow_drop_down)
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
                   GestureDetector(
                     onTap: () => _showChoiceDialog(context),
                     child: ClipRRect(
@@ -214,11 +130,11 @@ class _CreatePostState extends State<CreatePost> {
                                 borderSide:
                                     BorderSide(color: Colors.black, width: 2.0),
                                 borderRadius: BorderRadius.circular(15)),
-                            hintText: "Add home",
+                            hintText: "id",
                             filled: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10)),
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         maxLines: 5,
                       )),
                   SizedBox(
@@ -243,7 +159,6 @@ class _CreatePostState extends State<CreatePost> {
                         keyboardType: TextInputType.text,
                         maxLines: 5,
                       )),
-
                   SizedBox(
                     height: 10,
                   ),
@@ -322,20 +237,13 @@ class _CreatePostState extends State<CreatePost> {
                             padding: const EdgeInsets.all(8.0),
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  // community_id = communityList[index].id;
-                                  print(
-                                      "Community_id:::::::::::::::::::::::::::" +
-                                          communityList[index].id);
-                                });
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            (ShowCommunityPost(
-                                              communityPost_id:
-                                                  communityList[index].id,
-                                            ))));
+                                // setState(() {
+                                //   community_id = communityList[index].id;
+                                //   print(
+                                //       "Community_id:::::::::::::::::::::::::::" +
+                                //           community_id);
+                                // });
+                                Navigator.pop(context);
                               },
                               child: Text(
                                 communityList[index].community_name,

@@ -5,6 +5,7 @@ class NewChatModel {
   String message;
   String time;
   String status;
+  String con_number;
   String created_at;
   String updated_at;
 
@@ -15,6 +16,7 @@ class NewChatModel {
       required this.message,
       required this.time,
       required this.status,
+      required this.con_number,
       required this.created_at,
       required this.updated_at});
 }

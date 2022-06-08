@@ -15,22 +15,27 @@ import 'package:http/http.dart' as http;
 import 'package:spotify/variables/variables.dart';
 
 import 'Chattroom.dart';
+import 'models/community_postmodel.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class ShowCommunityPost extends StatefulWidget {
+  String communityPost_id;
+  ShowCommunityPost({Key? key, required this.communityPost_id})
+      : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _ShowCommunityPostState createState() => _ShowCommunityPostState();
 }
 
-class _HomeState extends State<Home> {
-  bool _hasBeenPressed = false;
+class _ShowCommunityPostState extends State<ShowCommunityPost> {
+  // bool _hasBeenPressed = false;
 
-  bool _isBeenPressed = false;
-  bool _oneBeenPressed = false;
+  // bool _isBeenPressed = false;
+  // bool _oneBeenPressed = false;
 
-  bool _wasBeenPressed = false;
-  bool _hadBeenPressed = false;
+  // bool _wasBeenPressed = false;
+  // bool _hadBeenPressed = false;
+
+  String communityPost_id = "";
 
   bool _isVisible = false;
   bool like = false;
@@ -46,7 +51,7 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPostData();
+    getPostData(widget.communityPost_id);
   }
 
   var nameController = TextEditingController();
@@ -61,7 +66,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Home",
+          "Community Posts",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(0xff272525),
@@ -76,10 +81,10 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: postList.isEmpty
+      body: communityModelList.isEmpty
           ? Center(child: Text("No Posts"))
           : ListView.builder(
-              itemCount: postList.length,
+              itemCount: communityModelList.length,
               itemBuilder: (context, index) {
                 return Column(
                   children: [
@@ -102,7 +107,7 @@ class _HomeState extends State<Home> {
                                     ),
                                 child: ClipOval(
                                   child: Image.network(
-                                    postList[index].image,
+                                    communityModelList[index].image,
                                     // width: 70.0,
                                     // height: 70.0,
                                     fit: BoxFit.cover,
@@ -112,7 +117,7 @@ class _HomeState extends State<Home> {
                               SizedBox(
                                 width: 10,
                               ),
-                              Text(postList[index].name,
+                              Text(communityModelList[index].name,
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.black,
@@ -176,13 +181,13 @@ class _HomeState extends State<Home> {
                     ),
                     SizedBox(
                       width: 320,
-                      child: Text(postList[index].description,
+                      child: Text(communityModelList[index].description,
                           textAlign: TextAlign.justify),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Image.network(
-                        postList[index].postImage,
+                        communityModelList[index].postImage,
                         // width: 70.0,
                         // height: 70.0,
                         fit: BoxFit.cover,
@@ -196,11 +201,11 @@ class _HomeState extends State<Home> {
                             GestureDetector(
                               onTap: () => {
                                 setState(() {
-                                  post_id = postList[index].id;
+                                  post_id = communityModelList[index].id;
                                   print("Like id:::::::::::::::::::::::::::" +
                                       post_id);
                                   showlikepost(post_id);
-                                  postList[index].like = true;
+                                  communityModelList[index].like = true;
                                   // PostModel().like = true;
                                   // selected = index;
                                   // _oneBeenPressed = !_oneBeenPressed;
@@ -220,19 +225,16 @@ class _HomeState extends State<Home> {
                             SizedBox(
                               width: 5.0,
                             ),
-                            StatefulBuilder(builder:
-                                (BuildContext context, StateSetter setState) {
-                              return Text(postList[index].likes,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold));
-                            })
+                            Text(communityModelList[index].likes,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
                           ],
                         ),
                         GestureDetector(
                           onTap: () => setState(() {
-                            post_id = postList[index].id;
+                            post_id = communityModelList[index].id;
                             print("comment id:::::::::::::::::::::::::::" +
                                 post_id);
                             showpostcomments(post_id);
@@ -247,7 +249,7 @@ class _HomeState extends State<Home> {
                               SizedBox(
                                 width: 5.0,
                               ),
-                              Text(postList[index].comments,
+                              Text(communityModelList[index].comments,
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.black,
@@ -257,7 +259,7 @@ class _HomeState extends State<Home> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            sharePost(postList[index].id);
+                            sharePost(communityModelList[index].id);
                           },
                           child: Row(
                             children: [
@@ -534,23 +536,29 @@ class _HomeState extends State<Home> {
         });
   }
 
-  void getPostData() async {
+  void getPostData(String communityPostId) async {
     print("POST FUNCTION CALLED:::::::::::::::::::::::::::" + userModel.token);
+    print("object" + communityPostId);
     Map<String, String> header = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       "Authorization": "Bearer " + userModel.token
     };
+    var url = Uri.parse('http://spotify.bhattihospital.com/api/communityPost/' +
+        communityPostId);
 
-    var response = await http.get(
-        Uri.parse(
-          'http://spotify.bhattihospital.com/api/homePost',
-        ),
-        headers: header);
+    var response = await http.get(url, headers: header);
+    // var response = await http.get(
+    //     Uri.parse(
+    //       'http://spotify.bhattihospital.com/api/CommunityPost/' +
+    //           communityPostId,
+    //     ),
+    //     headers: header);
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
+      // print("hshshsjsjsddh" + jsonBody.toString());
       for (int i = 0; i < jsonBody['message'].length; i++) {
-        postList.add(PostModel(
+        communityModelList.add(CommunityPostModel(
             id: jsonBody['message'][i]['id'].toString(),
             userID: jsonBody['message'][i]['user_id'].toString(),
             postImage: jsonBody['message'][i]['postImage'].toString(),
@@ -563,6 +571,8 @@ class _HomeState extends State<Home> {
             image: jsonBody['message'][i]['image'].toString()));
       }
       setState(() {});
+    } else {
+      print("else::::::::::::::::::" + response.statusCode.toString());
     }
   }
 
@@ -670,7 +680,26 @@ class _HomeState extends State<Home> {
         _scaffoldKey.currentState!.showSnackBar(SnackBar(
           content: Text("Post Liked"),
         ));
-
+        // showDialog(
+        //   barrierDismissible: true,
+        //   // barrierColor: Theme.of(context).primaryColor,
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(15.0)), //this right here,
+        //       backgroundColor: Colors.white,
+        //       content: Container(
+        //         height: 50,
+        //         child: Center(
+        //           child: Text("like Deleted",
+        //               textAlign: TextAlign.center,
+        //               style: TextStyle(color: Colors.black, fontSize: 15)),
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // );
         // // print('MESSAGE:::::::' + responseBody['message']);
 
       } else {}

@@ -5,32 +5,32 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:spotify/bottom_bar.dart';
+
 import 'package:spotify/calendar.dart';
-import 'package:spotify/profile.dart';
+import 'package:spotify/models/view_profile_post_model.dart';
+
 import 'package:spotify/sportsinterest.dart';
 import 'package:spotify/variables/variables.dart';
 import 'package:http/http.dart' as http;
 
-import 'Community.dart';
-import 'Editing_the_post.dart';
-import 'edit_comment.dart';
 import 'models/commentModel.dart';
 import 'models/edit_my_comment.dart';
-import 'models/my_post_model.dart';
-import 'models/post_model.dart';
-import 'models/profile_model.dart';
-import 'models/user_post_model.dart';
 
-class UpdateProfile extends StatefulWidget {
-  const UpdateProfile({Key? key}) : super(key: key);
+import 'models/post_model.dart';
+
+import 'models/user_post_model.dart';
+import 'models/view_profile_model.dart';
+
+class ViewProfile extends StatefulWidget {
+  String userSearch_id;
+  ViewProfile({Key? key, required this.userSearch_id}) : super(key: key);
 
   @override
-  State<UpdateProfile> createState() => _UpdateProfileState();
+  State<ViewProfile> createState() => _ViewProfileState();
 }
 
-class _UpdateProfileState extends State<UpdateProfile> {
+class _ViewProfileState extends State<ViewProfile> {
   bool _isVisible = false;
 
   void showToast() {
@@ -47,15 +47,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
   var formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String post_id = '';
-  bool _isEnable = false;
-  bool _atEnable = false;
-  bool _onEnable = false;
-  List<UserPostModel> userspostList = [];
+  String userSearch_id = '';
+  List<ViewProfilePostModel> ViewOtherProfileList = [];
 
-  String Ftitle = "Azan Malik";
-  String title = "Ali";
-  String Ctitle = "********";
-  String Ptitle = "********";
   bool isEditable = false;
   bool _oneBeenPressed = false;
   List<PostModel> postList = [];
@@ -65,7 +59,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getProfileData();
+    getProfileData(widget.userSearch_id);
   }
 
   // GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -80,12 +74,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => interestedsports()));
+                  MaterialPageRoute(builder: (context) => BottomBar()));
             }
             //onPressed: () => Navigator.of(context).pop(),
             ),
         title: Text(
-          'Profile',
+          'User Profile',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -103,7 +97,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               )),
         ],
       ),
-      body: profileList.isEmpty
+      body: viewprofileList.isEmpty
           ? Center(child: CircularProgressIndicator())
           : Column(
               children: [
@@ -124,7 +118,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           ),
                       child: ClipOval(
                         child: Image.network(
-                          profileList[0].image,
+                          viewprofileList[0].profileImage,
                           // width: 70.0,
                           // height: 70.0,
                           fit: BoxFit.cover,
@@ -135,33 +129,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       height: 10,
                     ),
                     Text(
-                      profileList[0].name,
+                      viewprofileList[0].name,
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Personal Information",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => profile()));
-                              })
-                        ],
-                      ),
                     ),
                     SizedBox(
                       height: 10,
@@ -198,7 +168,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          profileList[0].name,
+                          viewprofileList[0].name,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 17,
@@ -239,7 +209,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          profileList[0].email,
+                          viewprofileList[0].email,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 17,
@@ -280,7 +250,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          profileList[0].bio,
+                          viewprofileList[0].bio,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 17,
@@ -294,7 +264,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 // Expanded(
                 //   child: ListView.builder(
                 //       shrinkWrap: true,
-                //       itemCount: profileList.length,
+                //       itemCount: viewprofileList.length,
                 //       itemBuilder: (context, index) {
                 //         return
 
@@ -303,12 +273,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 SizedBox(
                   height: 10,
                 ),
-                userspostList.isEmpty
+                ViewOtherProfileList.isEmpty
                     ? Center(child: Text("No Posts"))
                     : Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: userspostList.length,
+                          itemCount: ViewOtherProfileList.length,
                           itemBuilder: (context, index) {
                             return Column(
                               children: [
@@ -334,7 +304,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                                 ),
                                             child: ClipOval(
                                               child: Image.network(
-                                                userspostList[index].image,
+                                                ViewOtherProfileList[index]
+                                                    .image,
                                                 // width: 70.0,
                                                 // height: 70.0,
                                                 fit: BoxFit.cover,
@@ -344,7 +315,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Text(userspostList[index].name,
+                                          Text(ViewOtherProfileList[index].name,
                                               style: TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.black,
@@ -359,12 +330,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                                   Navigator.of(context).pop();
                                                 } else {
                                                   if (result == 1) {
-                                                    print(userspostList[index]
+                                                    print(ViewOtherProfileList[
+                                                            index]
                                                         .id);
                                                     deletePost(
-                                                        userspostList[index]
+                                                        ViewOtherProfileList[
+                                                                index]
                                                             .id);
-                                                    Navigator.of(context).pop();
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: ((context) =>
+                                                                BottomBar())));
                                                   }
                                                 }
                                               },
@@ -406,13 +383,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                 ),
                                 SizedBox(
                                   width: 320,
-                                  child: Text(userspostList[index].description,
+                                  child: Text(
+                                      ViewOtherProfileList[index].description,
                                       textAlign: TextAlign.justify),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Image.network(
-                                    userspostList[index].postImage,
+                                    ViewOtherProfileList[index].postImage,
                                     // width: 70.0,
                                     // height: 70.0,
                                     fit: BoxFit.cover,
@@ -427,12 +405,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                         GestureDetector(
                                           onTap: () => {
                                             setState(() {
-                                              post_id = userspostList[index].id;
+                                              post_id =
+                                                  ViewOtherProfileList[index]
+                                                      .id;
                                               print(
                                                   "Like id:::::::::::::::::::::::::::" +
                                                       post_id);
                                               showlikepost(post_id);
-                                              userspostList[index].like = true;
+                                              ViewOtherProfileList[index].like =
+                                                  true;
                                               // PostModel().like = true;
                                               // selected = index;
                                               // _oneBeenPressed = !_oneBeenPressed;
@@ -452,7 +433,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                         SizedBox(
                                           width: 5.0,
                                         ),
-                                        Text(userspostList[index].likes,
+                                        Text(
+                                            ViewOtherProfileList[index]
+                                                .comments,
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.black,
@@ -461,7 +444,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     ),
                                     GestureDetector(
                                       onTap: () => setState(() {
-                                        post_id = userspostList[index].id;
+                                        post_id =
+                                            ViewOtherProfileList[index].id;
                                         print(
                                             "comment id:::::::::::::::::::::::::::" +
                                                 post_id);
@@ -477,7 +461,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           SizedBox(
                                             width: 5.0,
                                           ),
-                                          Text(userspostList[index].comments,
+                                          Text(
+                                              ViewOtherProfileList[index]
+                                                  .comments,
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.black,
@@ -489,7 +475,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            sharePost(userspostList[index].id);
+                                            sharePost(
+                                                ViewOtherProfileList[index].id);
                                           },
                                           child: Row(
                                             children: [
@@ -519,647 +506,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
               ],
             ),
     );
-
-    //   body: SingleChildScrollView(
-    //     child: Center(
-    //       child: Column(
-    //         children: [
-    //           SizedBox(
-    //             height: 10,
-    //           ),
-    //           // Image.asset(
-    //           //   'assets/person_2.png',
-    //           //   width: 70.0,
-    //           //   height: 70.0,
-    //           //   fit: BoxFit.cover,
-    //           // ),
-    //           Image.asset(
-    //             'assets/person.png',
-    //             width: 70.0,
-    //             height: 70.0,
-    //             fit: BoxFit.cover,
-    //           ),
-    //           SizedBox(
-    //             height: 10,
-    //           ),
-
-    //           Text(
-    //             'Naveed Khan',
-    //             style:
-    //                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-    //           ),
-    //           // GestureDetector(
-    //           //   onTap: () => _showChoiceDialog(context),
-    //           //   child: ClipRRect(
-    //           //     borderRadius: BorderRadius.circular(35.0),
-    //           //     child: Container(
-    //           //       decoration: BoxDecoration(
-    //           //         borderRadius: BorderRadius.circular(20.0),
-    //           //         // shape: BoxShape.circle,
-    //           //       ),
-    //           //       width: 70.0,
-    //           //       height: 70.0,
-    //           //       // color: Colors.green,
-    //           //       child: (imageFile == null)
-    //           //           ? Image.asset(
-    //           //               'assets/person.png',
-    //           //               width: 70.0,
-    //           //               height: 70.0,
-    //           //               fit: BoxFit.cover,
-    //           //             )
-    //           //           // Text("Choose Image")
-    //           //           : Image.file(
-    //           //               File(imageFile!.path),
-    //           //               // width: 290,
-    //           //               // height: 120,
-    //           //               fit: BoxFit.cover,
-    //           //             ),
-    //           //     ),
-    //           //   ),
-    //           // ),
-
-    //           SizedBox(
-    //             height: 10,
-    //           ),
-    //           Padding(
-    //             padding: const EdgeInsets.symmetric(vertical: 20),
-    //             child: Center(
-    //               child: Column(
-    //                 children: [
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 40),
-    //                     child: Row(
-    //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                       children: [
-    //                         Text(
-    //                           "FirstName",
-    //                           style: TextStyle(
-    //                               color: Colors.black,
-    //                               fontSize: 17,
-    //                               fontWeight: FontWeight.bold),
-    //                         ),
-    //                         IconButton(
-    //                             icon: Icon(Icons.edit),
-    //                             onPressed: () {
-    //                               setState(() {
-    //                                 _isEnable = true;
-    //                               });
-    //                             })
-    //                       ],
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 10,
-    //                   ),
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 40),
-    //                     child: SizedBox(
-    //                       width: 300,
-    //                       child: Expanded(
-    //                           child: !_isEnable
-    //                               ? Text(title)
-    //                               : TextFormField(
-    //                                   initialValue: title,
-    //                                   textInputAction: TextInputAction.done,
-    //                                   onFieldSubmitted: (value) {
-    //                                     setState(() => {
-    //                                           isEditable = false,
-    //                                           title = value
-    //                                         });
-    //                                   })),
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 20,
-    //                   ),
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 40),
-    //                     child: Row(
-    //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                       children: [
-    //                         Text(
-    //                           "LastName",
-    //                           style: TextStyle(
-    //                               color: Colors.black,
-    //                               fontSize: 17,
-    //                               fontWeight: FontWeight.bold),
-    //                         ),
-    //                         IconButton(
-    //                             icon: Icon(Icons.edit),
-    //                             onPressed: () {
-    //                               setState(() {
-    //                                 isEditable = true;
-    //                               });
-    //                             })
-    //                       ],
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 10,
-    //                   ),
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 40),
-    //                     child: SizedBox(
-    //                       width: 300,
-    //                       child: Expanded(
-    //                           child: !isEditable
-    //                               ? Text(Ftitle)
-    //                               : TextFormField(
-    //                                   initialValue: Ftitle,
-    //                                   textInputAction: TextInputAction.done,
-    //                                   onFieldSubmitted: (value) {
-    //                                     setState(() => {
-    //                                           isEditable = false,
-    //                                           Ftitle = value
-    //                                         });
-    //                                   })),
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 20,
-    //                   ),
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 40),
-    //                     child: Row(
-    //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                       children: [
-    //                         Text(
-    //                           "Password",
-    //                           style: TextStyle(
-    //                               color: Colors.black,
-    //                               fontSize: 17,
-    //                               fontWeight: FontWeight.bold),
-    //                         ),
-    //                         IconButton(
-    //                             icon: Icon(Icons.edit),
-    //                             onPressed: () {
-    //                               setState(() {
-    //                                 _onEnable = true;
-    //                               });
-    //                             })
-    //                       ],
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 20,
-    //                   ),
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 40),
-    //                     child: SizedBox(
-    //                       width: 300,
-    //                       child: Expanded(
-    //                           child: !_onEnable
-    //                               ? Text(Ptitle)
-    //                               : TextFormField(
-    //                                   obscureText: true,
-    //                                   keyboardType:
-    //                                       TextInputType.visiblePassword,
-    //                                   initialValue: Ptitle,
-    //                                   textInputAction: TextInputAction.done,
-    //                                   onFieldSubmitted: (value) {
-    //                                     setState(() => {
-    //                                           _onEnable = false,
-    //                                           Ptitle = value
-    //                                         });
-    //                                   })),
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 30,
-    //                   ),
-    //                   SizedBox(
-    //                       width: 290,
-    //                       height: 45,
-    //                       child: TextFormField(
-    //                         style: TextStyle(height: 1.5),
-    //                         decoration: InputDecoration(
-    //                             border: OutlineInputBorder(
-    //                                 borderSide: BorderSide(
-    //                                     color: Colors.black, width: 2.0),
-    //                                 borderRadius: BorderRadius.circular(15)),
-    //                             hintText: "Bio",
-    //                             filled: true,
-    //                             contentPadding: EdgeInsets.symmetric(
-    //                                 vertical: 10, horizontal: 10)),
-    //                         obscureText: true,
-    //                         keyboardType: TextInputType.text,
-    //                       )),
-    //                   SizedBox(
-    //                     height: 10,
-    //                   ),
-    //                   SizedBox(
-    //                     height: 30,
-    //                   ),
-    //                   GestureDetector(
-    //                     onTap: () {
-    //                       Navigator.push(
-    //                           context,
-    //                           MaterialPageRoute(
-    //                               builder: (context) => (BottomBar())));
-    //                     },
-    //                     child: Container(
-    //                       height: 40,
-    //                       width: 140,
-    //                       decoration: BoxDecoration(
-    //                         color: Colors.cyan,
-    //                         borderRadius: new BorderRadius.circular(10.0),
-    //                       ),
-    //                       child: Center(
-    //                           child: Text(
-    //                         "Update",
-    //                         style: TextStyle(
-    //                             fontSize: 20,
-    //                             fontWeight: FontWeight.bold,
-    //                             fontStyle: FontStyle.normal,
-    //                             color: Colors.white),
-    //                       )),
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 20,
-    //                   ),
-    //                   GestureDetector(
-    //                     onTap: () {
-    //                       Navigator.push(
-    //                           context,
-    //                           MaterialPageRoute(
-    //                               builder: (context) => Community()));
-    //                     },
-    //                     child: Text(
-    //                       "Create Community",
-    //                       style: TextStyle(
-    //                           fontSize: 17.0,
-    //                           fontStyle: FontStyle.normal,
-    //                           color: Colors.black),
-    //                     ),
-    //                   ),
-    //                   SizedBox(
-    //                     height: 20,
-    //                   ),
-    //                   Column(
-    //                     children: [
-    //                       Padding(
-    //                         padding: const EdgeInsets.symmetric(horizontal: 20),
-    //                         child: Row(
-    //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                           children: [
-    //                             Row(
-    //                               children: [
-    //                                 Image.asset(
-    //                                   "assets/person.png",
-    //                                   height: 60,
-    //                                   width: 60,
-    //                                 ),
-    //                                 Text("Player 1",
-    //                                     style: TextStyle(
-    //                                         fontSize: 20,
-    //                                         color: Colors.black,
-    //                                         fontWeight: FontWeight.bold)),
-    //                               ],
-    //                             ),
-    //                             Padding(
-    //                                 padding: const EdgeInsets.all(8.0),
-    //                                 child: PopupMenuButton(
-    //                                     onSelected: (result) {
-    //                                       if (result == 0) {
-    //                                         Navigator.push(
-    //                                           context,
-    //                                           MaterialPageRoute(
-    //                                               builder: (context) =>
-    //                                                   Editing()),
-    //                                         );
-    //                                       } else {
-    //                                         if (result == 1) {
-    //                                           // Navigator.push(
-    //                                           //   context,
-    //                                           //   MaterialPageRoute(
-    //                                           //       builder: (context) =>
-    //                                           //           BottomBar()),
-    //                                           // );
-    //                                         }
-    //                                       }
-    //                                     },
-    //                                     offset: Offset(0, 50),
-    //                                     padding: EdgeInsets.symmetric(
-    //                                         horizontal: 10, vertical: 20),
-    //                                     icon: Icon(Icons
-    //                                         .more_vert), //don't specify icon if you want 3 dot menu
-    //                                     color:
-    //                                         Color.fromARGB(255, 235, 241, 245),
-    //                                     itemBuilder: (context) => [
-    //                                           PopupMenuItem<int>(
-    //                                             value: 0,
-    //                                             // onTap: (() {
-    //                                             //   Navigator.push(
-    //                                             //       context,
-    //                                             //       MaterialPageRoute(
-    //                                             //           builder: (context) =>
-    //                                             //               Profile()));
-    //                                             // }),
-    //                                             child: Padding(
-    //                                               padding:
-    //                                                   const EdgeInsets.only(
-    //                                                       left: 10),
-    //                                               child: Text(
-    //                                                 "Edit",
-    //                                                 style: TextStyle(
-    //                                                     color: Color.fromARGB(
-    //                                                         255, 0, 0, 0)),
-    //                                               ),
-    //                                             ),
-    //                                           ),
-    //                                           PopupMenuItem<int>(
-    //                                             value: 1,
-    //                                             // onTap: (() {
-    //                                             //   Navigator.push(
-    //                                             //       context,
-    //                                             //       MaterialPageRoute(
-    //                                             //           builder: (context) =>
-    //                                             //               Favourite()));
-    //                                             // }),
-    //                                             child: Padding(
-    //                                               padding:
-    //                                                   const EdgeInsets.only(
-    //                                                       left: 10),
-    //                                               child: Text("Delete"),
-    //                                             ),
-    //                                           ),
-    //                                           // PopupMenuItem<int>(
-    //                                           //   value: 1,
-    //                                           //   child: Padding(
-    //                                           //     padding:
-    //                                           //         const EdgeInsets.only(
-    //                                           //             left: 10),
-    //                                           //     child: Text("Share"),
-    //                                           //   ),
-    //                                           // ),
-    //                                         ]))
-    //                           ],
-    //                         ),
-    //                       ),
-    //                       SizedBox(
-    //                         width: 320,
-    //                         child: Text("Good Will send you some suggestions. ",
-    //                             textAlign: TextAlign.justify),
-    //                       ),
-    //                       Padding(
-    //                         padding: const EdgeInsets.all(16.0),
-    //                         child: Image.asset(
-    //                           "assets/house.jpg",
-    //                           // height: 60,
-    //                           // width: 60,
-    //                         ),
-    //                       ),
-    //                       Row(
-    //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //                         children: [
-    //                           Row(
-    //                             children: [
-    //                               Icon(FontAwesomeIcons.thumbsUp),
-    //                               SizedBox(
-    //                                 width: 5.0,
-    //                               ),
-    //                               Text("Like")
-    //                             ],
-    //                           ),
-    //                           GestureDetector(
-    //                             onTap: () => _playlistModalBottomSheet(context),
-    //                             child: Row(
-    //                               children: [
-    //                                 Icon(FontAwesomeIcons.comment),
-    //                                 SizedBox(
-    //                                   width: 5.0,
-    //                                 ),
-    //                                 Text("Comment")
-    //                               ],
-    //                             ),
-    //                           ),
-    //                           Row(
-    //                             children: [
-    //                               Icon(FontAwesomeIcons.share),
-    //                               SizedBox(
-    //                                 width: 5.0,
-    //                               ),
-    //                               Text("Share")
-    //                             ],
-    //                           )
-    //                         ],
-    //                       ),
-    //                       SizedBox(
-    //                         height: 10,
-    //                       ),
-    //                       Visibility(
-    //                         visible: _isVisible,
-    //                         child: SizedBox(
-    //                             width: 330,
-    //                             height: 45,
-    //                             child: TextFormField(
-    //                               style: TextStyle(height: 1.5),
-    //                               decoration: InputDecoration(
-    //                                   border: OutlineInputBorder(
-    //                                       borderSide: BorderSide(
-    //                                           color: Colors.black, width: 2.0),
-    //                                       borderRadius:
-    //                                           BorderRadius.circular(8.0)),
-    //                                   hintText: "Comment",
-    //                                   filled: true,
-    //                                   contentPadding: EdgeInsets.symmetric(
-    //                                       vertical: 10, horizontal: 10)),
-    //                               keyboardType: TextInputType.emailAddress,
-    //                             )),
-    //                       )
-    //                     ],
-    //                   ),
-    //                   SizedBox(
-    //                     height: 10,
-    //                   ),
-    //                   Divider(
-    //                     thickness: 5,
-    //                   ),
-    //                   Column(
-    //                     children: [
-    //                       Padding(
-    //                         padding: const EdgeInsets.symmetric(horizontal: 20),
-    //                         child: Row(
-    //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                           children: [
-    //                             Row(
-    //                               children: [
-    //                                 Image.asset(
-    //                                   "assets/person1.png",
-    //                                   height: 60,
-    //                                   width: 60,
-    //                                 ),
-    //                                 Text("Player 2",
-    //                                     style: TextStyle(
-    //                                         fontSize: 20,
-    //                                         color: Colors.black,
-    //                                         fontWeight: FontWeight.bold)),
-    //                               ],
-    //                             ),
-    //                             Padding(
-    //                                 padding: const EdgeInsets.all(8.0),
-    //                                 child: PopupMenuButton(
-    //                                     onSelected: (result) {
-    //                                       if (result == 0) {
-    //                                         Navigator.push(
-    //                                           context,
-    //                                           MaterialPageRoute(
-    //                                               builder: (context) =>
-    //                                                   Editing()),
-    //                                         );
-    //                                       } else {
-    //                                         if (result == 1) {
-    //                                           // Navigator.push(
-    //                                           //   context,
-    //                                           //   MaterialPageRoute(
-    //                                           //       builder: (context) =>
-    //                                           //           UpdateProfile()),
-    //                                           // );
-    //                                         }
-    //                                       }
-    //                                     },
-    //                                     offset: Offset(0, 50),
-    //                                     padding: EdgeInsets.symmetric(
-    //                                         horizontal: 10, vertical: 20),
-    //                                     icon: Icon(Icons
-    //                                         .more_vert), //don't specify icon if you want 3 dot menu
-    //                                     color:
-    //                                         Color.fromARGB(255, 235, 241, 245),
-    //                                     itemBuilder: (context) => [
-    //                                           PopupMenuItem<int>(
-    //                                             value: 0,
-    //                                             // onTap: (() {
-    //                                             //   Navigator.push(
-    //                                             //       context,
-    //                                             //       MaterialPageRoute(
-    //                                             //           builder: (context) =>
-    //                                             //               Profile()));
-    //                                             // }),
-    //                                             child: Padding(
-    //                                               padding:
-    //                                                   const EdgeInsets.only(
-    //                                                       left: 10),
-    //                                               child: Text(
-    //                                                 "Edit",
-    //                                                 style: TextStyle(
-    //                                                     color: Color.fromARGB(
-    //                                                         255, 0, 0, 0)),
-    //                                               ),
-    //                                             ),
-    //                                           ),
-    //                                           PopupMenuItem<int>(
-    //                                             value: 1,
-    //                                             // onTap: (() {
-    //                                             //   Navigator.push(
-    //                                             //       context,
-    //                                             //       MaterialPageRoute(
-    //                                             //           builder: (context) =>
-    //                                             //               Favourite()));
-    //                                             // }),
-    //                                             child: Padding(
-    //                                               padding:
-    //                                                   const EdgeInsets.only(
-    //                                                       left: 10),
-    //                                               child: Text("Delete"),
-    //                                             ),
-    //                                           ),
-    //                                           // PopupMenuItem<int>(
-    //                                           //   value: 1,
-    //                                           //   child: Padding(
-    //                                           //     padding:
-    //                                           //         const EdgeInsets.only(
-    //                                           //             left: 10),
-    //                                           //     child: Text("Share"),
-    //                                           //   ),
-    //                                           // ),
-    //                                         ]))
-    //                           ],
-    //                         ),
-    //                       ),
-    //                       SizedBox(
-    //                         width: 320,
-    //                         child: Text(
-    //                             "Hello Hope you are doing well. Stay in touch for further updates",
-    //                             textAlign: TextAlign.justify),
-    //                       ),
-    //                       Padding(
-    //                         padding: const EdgeInsets.all(16.0),
-    //                         child: Image.asset(
-    //                           "assets/house.jpg",
-    //                           // height: 60,
-    //                           // width: 60,
-    //                         ),
-    //                       ),
-    //                       Row(
-    //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //                         children: [
-    //                           Row(
-    //                             children: [
-    //                               Icon(FontAwesomeIcons.thumbsUp),
-    //                               SizedBox(
-    //                                 width: 5.0,
-    //                               ),
-    //                               Text("Like")
-    //                             ],
-    //                           ),
-    //                           GestureDetector(
-    //                             onTap: () => _playlistModalBottomSheet(context),
-    //                             child: Row(
-    //                               children: [
-    //                                 Icon(FontAwesomeIcons.comment),
-    //                                 SizedBox(
-    //                                   width: 5.0,
-    //                                 ),
-    //                                 Text("Comment")
-    //                               ],
-    //                             ),
-    //                           ),
-    //                           Row(
-    //                             children: [
-    //                               Icon(FontAwesomeIcons.share),
-    //                               SizedBox(
-    //                                 width: 5.0,
-    //                               ),
-    //                               Text("Share")
-    //                             ],
-    //                           )
-    //                         ],
-    //                       ),
-    //                       SizedBox(
-    //                         height: 10,
-    //                       ),
-    //                       // Visibility(
-    //                       //   visible: _isVisible,
-    //                       //   child: SizedBox(
-    //                       //       width: 330,
-    //                       //       height: 45,
-    //                       //       child: TextFormField(
-    //                       //         style: TextStyle(height: 1.5),
-    //                       //         decoration: InputDecoration(
-    //                       //             border: OutlineInputBorder(
-    //                       //                 borderSide: BorderSide(
-    //                       //                     color: Colors.black, width: 2.0),
-    //                       //                 borderRadius:
-    //                       //                     BorderRadius.circular(8.0)),
-    //                       //             hintText: "Comment",
-    //                       //             filled: true,
-    //                       //             contentPadding: EdgeInsets.symmetric(
-    //                       //                 vertical: 10, horizontal: 10)),
-    //                       //         keyboardType: TextInputType.emailAddress,
-    //                       //       )),
-    //                       // )
-    //                     ],
-    //                   )
-    //                 ],
-    //               ),
-    //             ),
-    //           )
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 
   _playlistModalBottomSheet(context) {
@@ -1412,55 +758,53 @@ class _UpdateProfileState extends State<UpdateProfile> {
         });
   }
 
-  void getProfileData() async {
-    if (profileList.isNotEmpty) {
-      profileList.clear();
+  void getProfileData(String userSearchId) async {
+    if (viewprofileList.isNotEmpty) {
+      viewprofileList.clear();
     }
-    if (userspostList.isNotEmpty) {
-      userspostList.clear();
+    if (ViewOtherProfileList.isNotEmpty) {
+      ViewOtherProfileList.clear();
     }
     print("POST FUNCTION CALLED:::::::::::::::::::::::::::" + userModel.token);
+
     Map<String, String> header = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       "Authorization": "Bearer " + userModel.token
     };
+    var url = Uri.parse(
+        'http://spotify.bhattihospital.com/api/UserProfile/' + userSearchId);
 
-    var response = await http.get(
-        Uri.parse(
-          'http://spotify.bhattihospital.com/api/showProfile',
-        ),
-        headers: header);
+    var response = await http.get(url, headers: header);
+    // var response = await http.get(
+    //     Uri.parse(
+    //       'http://spotify.bhattihospital.com/api/UserProfile/'+String userSearchId
+    //     ),
+    //     headers: header);
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
-
-      setState(() {
-        profileList.add(ProfileModel(
-          tokan: jsonBody['profile']['tokan'].toString(),
-          id: jsonBody['profile']['id'].toString(),
-          name: jsonBody['profile']['name'].toString(),
-          username: jsonBody['profile']['username'].toString(),
-          email: jsonBody['profile']['email'].toString(),
-          image: jsonBody['profile']['image'].toString(),
-          bio: jsonBody['profile']['bio'].toString(),
-        ));
-        for (int i = 0; i < jsonBody['profile']['posts'].length; i++) {
-          userspostList.add(UserPostModel(
-              id: jsonBody['profile']['posts'][i]['id'].toString(),
-              userID: jsonBody['profile']['posts'][i]['user_id'].toString(),
-              postImage:
-                  jsonBody['profile']['posts'][i]['postImage'].toString(),
-              description:
-                  jsonBody['profile']['posts'][i]['description'].toString(),
-              date: jsonBody['profile']['posts'][i]['date'].toString(),
-              time: jsonBody['profile']['posts'][i]['time'].toString(),
-              likes: jsonBody['profile']['posts'][i]['likes'].toString(),
-              comments: jsonBody['profile']['posts'][i]['comments'].toString(),
-              name: jsonBody['profile']['posts'][i]['name'].toString(),
-              image: jsonBody['profile']['posts'][i]['image'].toString()));
-        }
-        setState(() {});
-      });
+      print(jsonBody);
+      viewprofileList.add(ViewProfileModel(
+        name: jsonBody['profile']['name'].toString(),
+        profileImage: jsonBody['profile']['profileImage'].toString(),
+        email: jsonBody['profile']['email'].toString(),
+        bio: jsonBody['profile']['bio'].toString(),
+      ));
+      for (int i = 0; i < jsonBody['profile']['post'].length; i++) {
+        ViewOtherProfileList.add(ViewProfilePostModel(
+            id: jsonBody['profile']['post'][i]['id'].toString(),
+            userID: jsonBody['profile']['post'][i]['user_id'].toString(),
+            postImage: jsonBody['profile']['post'][i]['postImage'].toString(),
+            description:
+                jsonBody['profile']['post'][i]['description'].toString(),
+            date: jsonBody['profile']['post'][i]['date'].toString(),
+            time: jsonBody['profile']['post'][i]['time'].toString(),
+            likes: jsonBody['profile']['post'][i]['likes'].toString(),
+            comments: jsonBody['profile']['post'][i]['comments'].toString(),
+            name: jsonBody['profile']['post'][i]['name'].toString(),
+            image: jsonBody['profile']['post'][i]['image'].toString()));
+      }
+      setState(() {});
     }
   }
 
@@ -1485,101 +829,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
         // _scaffoldKey.currentState!.showSnackBar(SnackBar(
         //   content: Text("Post Deleted"),
         // ));
-        // showDialog(
-        //   barrierDismissible: true,
-        //   // barrierColor: Theme.of(context).primaryColor,
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return AlertDialog(
-        //       shape: RoundedRectangleBorder(
-        //           borderRadius: BorderRadius.circular(15.0)), //this right here,
-        //       backgroundColor: Colors.white,
-        //       content: Container(
-        //         height: 50,
-        //         child: Center(
-        //           child: Text("like Deleted",
-        //               textAlign: TextAlign.center,
-        //               style: TextStyle(color: Colors.black, fontSize: 15)),
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // );
-        // // print('MESSAGE:::::::' + responseBody['message']);
 
       }
     }
-
-    // PickedFile? imageFile = null;
-
-    // // Future<void> _showChoiceDialog(BuildContext context) async {
-    // Future<void> _showChoiceDialog(BuildContext context) {
-    //   return showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) {
-    //         return AlertDialog(
-    //           title: Text(
-    //             "Choose option",
-    //             style: TextStyle(color: Colors.blue),
-    //           ),
-    //           content: SingleChildScrollView(
-    //             child: ListBody(
-    //               children: [
-    //                 Divider(
-    //                   height: 1,
-    //                   color: Colors.blue,
-    //                 ),
-    //                 ListTile(
-    //                   onTap: () {
-    //                     _openGallery(context);
-    //                   },
-    //                   title: Text("Gallery"),
-    //                   leading: Icon(
-    //                     Icons.account_box,
-    //                     color: Colors.blue,
-    //                   ),
-    //                 ),
-    //                 Divider(
-    //                   height: 1,
-    //                   color: Colors.blue,
-    //                 ),
-    //                 ListTile(
-    //                   onTap: () {
-    //                     _openCamera(context);
-    //                   },
-    //                   title: Text("Camera"),
-    //                   leading: Icon(
-    //                     Icons.camera,
-    //                     color: Colors.blue,
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       });
-    // }
-
-    // void _openGallery(BuildContext context) async {
-    //   final pickedFile = await ImagePicker().getImage(
-    //     source: ImageSource.gallery,
-    //   );
-    //   setState(() {
-    //     imageFile = pickedFile!;
-    //   });
-
-    //   Navigator.pop(context);
-    // }
-
-    // void _openCamera(BuildContext context) async {
-    //   final pickedFile = await ImagePicker().getImage(
-    //     source: ImageSource.camera,
-    //   );
-    //   setState(() {
-    //     imageFile = pickedFile!;
-    //   });
-    //   Navigator.pop(context);
-    // }
   }
 
   registerUser(String post_id, String comment) async {

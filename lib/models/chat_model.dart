@@ -1,4 +1,5 @@
 class ChatModel {
+  String con_number;
   String send_id;
   String reciever_id;
 
@@ -7,7 +8,8 @@ class ChatModel {
   String image;
 
   ChatModel(
-      {required this.send_id,
+      {required this.con_number,
+      required this.send_id,
       required this.reciever_id,
       required this.status,
       required this.name,
