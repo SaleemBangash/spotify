@@ -59,7 +59,7 @@ class _NewcChatState extends State<NewcChat> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              print(chatList[index].con_number);
+                              // print(chatList[index].con_number);
                               // message_id = chatList[index].con_number;
                               userName = chatList[index].name;
                               message_id = chatList[index].reciever_id;
@@ -70,7 +70,10 @@ class _NewcChatState extends State<NewcChat> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => (chatt())));
+                                      builder: (context) => (chatt(
+                                          // receiver_id:
+                                          //     chatList[index].reciever_id,
+                                          ))));
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -452,18 +455,20 @@ class _NewcChatState extends State<NewcChat> {
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
       print(":::;;;::::;:::::::");
-      print(jsonBody["users"][0]["reciever_id"]);
+      // print(jsonBody["users"][0]["reciever_id"]);
       print(":::;;;::::;:::::::");
-      for (int i = 0; i < jsonBody['users'].length; i++) {
-        chatList.add(ChatModel(
-            con_number: jsonBody['users'][i]['con_number'].toString(),
-            send_id: jsonBody['users'][i]['send_id'].toString(),
-            reciever_id: jsonBody['users'][i]['reciever_id'].toString(),
-            status: jsonBody['users'][i]['status'].toString(),
-            name: jsonBody['users'][i]['name'].toString(),
-            image: jsonBody['users'][i]['image'].toString()));
-      }
-      setState(() {});
+
+      setState(() {
+        for (int i = 0; i < jsonBody['users'].length; i++) {
+          chatList.add(ChatModel(
+              con_number: jsonBody['users'][i]['con_number'].toString(),
+              send_id: jsonBody['users'][i]['send_id'].toString(),
+              reciever_id: jsonBody['users'][i]['reciever_id'].toString(),
+              status: jsonBody['users'][i]['status'].toString(),
+              name: jsonBody['users'][i]['name'].toString(),
+              image: jsonBody['users'][i]['image'].toString()));
+        }
+      });
     }
   }
 

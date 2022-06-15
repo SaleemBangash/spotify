@@ -154,12 +154,32 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold),
                           ),
-                          IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => profile()));
-                              })
+                          Row(
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => profile()));
+                                  }),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              IconButton(
+                                  icon: Icon(Icons.credit_card),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Community(
+                                                  interest_id:
+                                                      interestList[0].id,
+                                                )));
+                                  }),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -356,7 +376,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           child: PopupMenuButton(
                                               onSelected: (result) {
                                                 if (result == 0) {
-                                                  Navigator.of(context).pop();
+                                                  // Navigator.of(context).pop();
                                                 } else {
                                                   if (result == 1) {
                                                     print(userspostList[index]
@@ -364,7 +384,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                                     deletePost(
                                                         userspostList[index]
                                                             .id);
-                                                    Navigator.of(context).pop();
+                                                    // Navigator.of(context).pop();
                                                   }
                                                 }
                                               },
@@ -1443,6 +1463,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
           email: jsonBody['profile']['email'].toString(),
           image: jsonBody['profile']['image'].toString(),
           bio: jsonBody['profile']['bio'].toString(),
+          dob: jsonBody['profile']['dob'].toString(),
         ));
         for (int i = 0; i < jsonBody['profile']['posts'].length; i++) {
           userspostList.add(UserPostModel(

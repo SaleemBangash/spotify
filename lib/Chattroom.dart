@@ -17,6 +17,7 @@ class chatt extends StatefulWidget {
   // String receiver_id;
 
   chatt({
+    // required this.receiver_id,
     Key? key,
   }) : super(key: key);
 
@@ -39,7 +40,6 @@ class _chattState extends State<chatt> {
   var formKey = GlobalKey<FormState>();
   // String receiver_id = '';
   String uname = '';
-  List<NewChatModel> newchatList = [];
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class _chattState extends State<chatt> {
                   onTap: () {
                     // userName = chatList[0].name;
                     // // receiver_id = chatList[index].reciever_id;
-                    print("Reciever id::::::::;:" + receiverr_id);
+                    // print("Reciever id::::::::;:" + receiverr_id);
                     // print("conn nmbr::::::::;:" + chatList[0].name);
                     Navigator.push(
                         context,
@@ -225,7 +225,7 @@ class _chattState extends State<chatt> {
                             // String comment = nameController.text;
                             // String email = emailController.text;
                             registerUser(message_id, nameController.text);
-                            print(message_id);
+                            // print(message_id);
                           }
                           print(nameController.text);
                         },
@@ -271,8 +271,26 @@ class _chattState extends State<chatt> {
       var responseBody = json.decode(response.body);
       if (responseBody['message'] == 'Message send successfully') {
         //newchatList.add(NewChatModel(id: id, send_id: send_id, receiver_id: receiver_id, message: message, time: time, status: status, created_at: created_at, updated_at: updated_at));
-        Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => BottomBar())));
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: ((context) => BottomBar())));
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Message Sent'),
+              );
+            });
+        nameController.clear();
+
+        print('MESSAGE:::::::' + responseBody['message']);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(responseBody['message']),
+              );
+            });
 
         /// navigate to login screen
         print('MESSAGE:::::::' + responseBody['message']);
@@ -283,8 +301,8 @@ class _chattState extends State<chatt> {
   }
 
   showpostcomments(String recieverId) async {
-    if (chatList.isNotEmpty) {
-      chatList.clear();
+    if (newchatList.isNotEmpty) {
+      newchatList.clear();
     }
 
     print("Called ::::::::::::::::::::::::::::::::::::::");

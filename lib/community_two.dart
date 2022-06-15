@@ -18,6 +18,7 @@ class CommunityTwo extends StatefulWidget {
 }
 
 class _CommunityTwoState extends State<CommunityTwo> {
+  String _text = 'Join';
   bool aChecked = false;
   bool bChecked = false;
   bool cChecked = false;
@@ -118,6 +119,9 @@ class _CommunityTwoState extends State<CommunityTwo> {
                                     // String email = emailController.text;
                                     registerUser(csearchList[index].id);
                                   }
+                                  setState(() {
+                                    _text = 'Joined';
+                                  });
                                   print(community_id);
                                 },
                                 child: Container(
@@ -135,7 +139,7 @@ class _CommunityTwoState extends State<CommunityTwo> {
                                     children: [
                                       Icon(Icons.add, color: Colors.white),
                                       Text(
-                                        "Join",
+                                        _text,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontStyle: FontStyle.normal,

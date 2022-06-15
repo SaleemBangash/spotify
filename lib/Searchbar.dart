@@ -19,6 +19,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  var _text = 'Connect';
   bool aChecked = false;
   bool bChecked = false;
   bool cChecked = false;
@@ -159,11 +160,12 @@ class _SearchBarState extends State<SearchBar> {
                                               registerUser(
                                                   searchList[index].id);
                                             }
+
                                             print(follower_id);
                                           },
                                           child: Container(
                                             height: 25,
-                                            width: 60,
+                                            width: 70,
                                             decoration: BoxDecoration(
                                               color: Colors.cyan,
                                               borderRadius:
@@ -172,7 +174,7 @@ class _SearchBarState extends State<SearchBar> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                "connect",
+                                                _text,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontStyle: FontStyle.normal,
@@ -198,8 +200,12 @@ class _SearchBarState extends State<SearchBar> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          (chatt())));
+                                                      builder: (context) => (chatt(
+                                                          // receiver_id:
+                                                          //     searchList[
+                                                          //             index]
+                                                          //         .id,
+                                                          ))));
                                             },
                                             child: Center(
                                               child: Text(
@@ -246,8 +252,16 @@ class _SearchBarState extends State<SearchBar> {
     var response =
         await http.post(url, body: jsonEncode(requestMap), headers: header);
     if (response.statusCode == 200) {
+      // setState(() {
+      //   _text = 'Following';
+      // });
       print('IF:::' + response.body);
       var responseBody = json.decode(response.body);
+      if (responseBody['success']) {
+        setState(() {
+          _text = 'Following';
+        });
+      }
       if (responseBody['message'] == 'Friend request Sent Successfuly') {
         /// navigate to login screen
         showDialog(

@@ -33,6 +33,13 @@ class _CreatePostState extends State<CreatePost> {
   String community_id = '';
   List<CommunityModel> communityList = [];
   String? dropvalue;
+  String _text = 'home';
+  changeText() {
+    setState(() {
+      _text = communityList[0].id.toString();
+    });
+  }
+
   var items = [
     'Home',
     'Community One',
@@ -44,12 +51,14 @@ class _CreatePostState extends State<CreatePost> {
   var nameController = TextEditingController();
   var descController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   getCommunityList(community_id);
-  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    descController.text = _text;
+    // getCommunityList(community_id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +88,50 @@ class _CreatePostState extends State<CreatePost> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // setState(() {
+                      //   community_id = communityList[0].id;
+                      // });
+
+                      getCommunityList();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(),
+                      child: Container(
+                        margin: EdgeInsets.all(19),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 220, 217, 217),
+                          border: Border.all(width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        width: 300,
+                        height: 40,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Select Community',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_drop_down)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                   SizedBox(
                     height: 10,
                   ),
@@ -206,6 +259,7 @@ class _CreatePostState extends State<CreatePost> {
                       width: 290,
                       height: 90,
                       child: TextFormField(
+                        // onChanged: (value) => changeText(),
                         controller: descController,
                         validator: (desc) => desc!.isEmpty ? 'Required' : null,
                         style: TextStyle(height: 1.5),
@@ -214,7 +268,7 @@ class _CreatePostState extends State<CreatePost> {
                                 borderSide:
                                     BorderSide(color: Colors.black, width: 2.0),
                                 borderRadius: BorderRadius.circular(15)),
-                            hintText: "Add home",
+                            // hintText: "Add home",
                             filled: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10)),
@@ -328,14 +382,19 @@ class _CreatePostState extends State<CreatePost> {
                                       "Community_id:::::::::::::::::::::::::::" +
                                           communityList[index].id);
                                 });
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            (ShowCommunityPost(
-                                              communityPost_id:
-                                                  communityList[index].id,
-                                            ))));
+                                changeText();
+                                // setState(() {
+                                //   _text = communityList[index].id;
+                                // });
+                                Navigator.of(context).pop();
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             (ShowCommunityPost(
+                                //               communityPost_id:
+                                //                   communityList[index].id,
+                                //             ))));
                               },
                               child: Text(
                                 communityList[index].community_name,
@@ -593,6 +652,8 @@ class _CreatePostState extends State<CreatePost> {
               ),
             );
           });
+      Navigator.push(
+          context, MaterialPageRoute(builder: ((context) => BottomBar())));
 
       print("PROFILE IMAGE UPDATED:::::::::::::::::::::::::::::::");
       nameController.clear();

@@ -6,6 +6,7 @@ class ProfileModel {
   String email;
   String image;
   String bio;
+  String dob;
 
   ProfileModel(
       {required this.tokan,
@@ -14,5 +15,6 @@ class ProfileModel {
       required this.username,
       required this.email,
       required this.image,
-      required this.bio});
+      required this.bio,
+      required this.dob});
 }

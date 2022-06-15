@@ -235,45 +235,45 @@ class _interestedsportsState extends State<interestedsports> {
                               SizedBox(
                                 height: 20,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Community(
-                                                interest_id: interestList[0].id,
-                                              )));
-                                },
-                                child: Text(
-                                  "Create Community",
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      fontStyle: FontStyle.normal,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CreateCommunityPost()));
-                                },
-                                child: Text(
-                                  "Create Community Post",
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      fontStyle: FontStyle.normal,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //             builder: (context) => Community(
+                              //                   interest_id: interestList[0].id,
+                              //                 )));
+                              //   },
+                              //   child: Text(
+                              //     "Create Community",
+                              //     style: TextStyle(
+                              //         fontSize: 17.0,
+                              //         fontStyle: FontStyle.normal,
+                              //         color: Colors.black),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 20,
+                              // ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //             builder: (context) =>
+                              //                 CreateCommunityPost()));
+                              //   },
+                              //   child: Text(
+                              //     "Create Community Post",
+                              //     style: TextStyle(
+                              //         fontSize: 17.0,
+                              //         fontStyle: FontStyle.normal,
+                              //         color: Colors.black),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 20,
+                              // ),
                               // GestureDetector(
                               //   onTap: () {
                               //     // Navigator.push(

@@ -124,19 +124,12 @@ class _HomeState extends State<Home> {
                               child: PopupMenuButton(
                                   onSelected: (result) {
                                     if (result == 0) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => BottomBar()),
-                                      );
+                                      // Navigator.of(context).pop();
                                     } else {
                                       if (result == 1) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BottomBar()),
-                                        );
+                                        print(postList[index].id);
+                                        deletePost(postList[index].id);
+                                        // Navigator.of(context).pop();
                                       }
                                     }
                                   },
@@ -311,13 +304,24 @@ class _HomeState extends State<Home> {
                                     horizontal: 25, vertical: 10),
                                 child: Row(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      child: Image.asset(
-                                        "assets/download1.jpg",
-                                        fit: BoxFit.cover,
-                                        width: 50,
-                                        height: 50,
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle
+                                          // image: DecorationImage(
+                                          //   image:
+                                          //       const AssetImage('assets/images/john.jpg'),
+                                          //   fit: BoxFit.fill,
+                                          // ),
+                                          ),
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          postList[index].image,
+                                          // width: 70.0,
+                                          // height: 70.0,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                     SizedBox(
@@ -676,6 +680,53 @@ class _HomeState extends State<Home> {
       } else {}
     } else {
       print('ELSE:::' + response.statusCode.toString());
+    }
+  }
+
+  void deletePost(String postID) async {
+    var url =
+        Uri.parse('http://spotify.bhattihospital.com/api/deletePost/' + postID);
+
+    Map<String, String> header = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      "Authorization": "Bearer " + userModel.token
+    };
+
+    var response = await http.get(url, headers: header);
+    if (response.statusCode == 200) {
+      print("RESPONSE:::::::::::::::" + response.body);
+      var responseBody = json.decode(response.body);
+
+      if (responseBody['success']) {
+        /// navigate to login screen
+        print('Post Deleted:::');
+        // _scaffoldKey.currentState!.showSnackBar(SnackBar(
+        //   content: Text("Post Deleted"),
+        // ));
+        // showDialog(
+        //   barrierDismissible: true,
+        //   // barrierColor: Theme.of(context).primaryColor,
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(15.0)), //this right here,
+        //       backgroundColor: Colors.white,
+        //       content: Container(
+        //         height: 50,
+        //         child: Center(
+        //           child: Text("like Deleted",
+        //               textAlign: TextAlign.center,
+        //               style: TextStyle(color: Colors.black, fontSize: 15)),
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // );
+        // // print('MESSAGE:::::::' + responseBody['message']);
+
+      }
     }
   }
 

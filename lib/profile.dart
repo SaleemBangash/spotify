@@ -25,6 +25,7 @@ class _profileState extends State<profile> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var bioController = TextEditingController();
+  var dobController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   PickedFile? imageFile = null;
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -32,12 +33,13 @@ class _profileState extends State<profile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('::::::::::::::::::::::::::::::::');
-    print(profileList[0].image);
-    print('::::::::::::::::::::::::::::::::');
+    // print('::::::::::::::::::::::::::::::::');
+    // print(profileList[0].image);
+    // print('::::::::::::::::::::::::::::::::');
     nameController.text = profileList[0].name;
     emailController.text = profileList[0].email;
     bioController.text = profileList[0].bio.toString();
+    dobController.text = profileList[0].dob.toString();
   }
 
   @override
@@ -204,6 +206,28 @@ class _profileState extends State<profile> {
                         keyboardType: TextInputType.emailAddress,
                       )),
                   SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                      width: 290,
+                      // height: 45,
+                      child: TextFormField(
+                        controller: dobController,
+                        validator: (dob) => dob!.isEmpty ? 'Required' : null,
+                        style: TextStyle(height: 1.5),
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.date_range),
+                            // border: OutlineInputBorder(
+                            //     borderSide:
+                            //         BorderSide(color: Colors.black, width: 2.0),
+                            //     borderRadius: BorderRadius.circular(15)),
+                            hintText: "DOB",
+                            // filled: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10)),
+                        keyboardType: TextInputType.datetime,
+                      )),
+                  SizedBox(
                     height: 30,
                   ),
                   GestureDetector(
@@ -213,10 +237,11 @@ class _profileState extends State<profile> {
                         String email = emailController.text;
                         String password = passwordController.text;
                         String bio = bioController.text;
+                        String dob = dobController.text;
                         // String imageFile = PickedFile.imageFile;
                         if (imageFile == null) {
                         } else {
-                          registerUser(name, email, bio, password);
+                          registerUser(name, email, bio, password, dob);
                           updateProfileData();
                         }
                       }
@@ -322,6 +347,7 @@ class _profileState extends State<profile> {
     String email,
     String bio,
     String password,
+    String dob,
   ) async {
     print("Called ::::::::::::::::::::::::::::::::::::::");
 
@@ -336,7 +362,8 @@ class _profileState extends State<profile> {
       "name": name,
       "email": email,
       "bio": bio,
-      "password": password
+      "password": password,
+      "dob": dob
     };
 
     var url = Uri.parse('http://spotify.bhattihospital.com/api/updateProfile');
@@ -373,14 +400,15 @@ class _profileState extends State<profile> {
         _scaffoldKey.currentState!.showSnackBar(SnackBar(
           content: Text("Profile Updated"),
         ));
-        // Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) => (UpdateProfile())));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => (BottomBar())));
         passwordController.clear();
-        setState(() {
-          profileList[0].name = name;
-          profileList[0].email = email;
-          profileList[0].bio = bio;
-        });
+        // setState(() {
+        //   profileList[0].name = name;
+        //   profileList[0].email = email;
+        //   profileList[0].bio = bio;
+        //   profileList[0].dob = dob;
+        // });
       } else {
         showDialog(
           barrierDismissible: true,
@@ -424,7 +452,8 @@ class _profileState extends State<profile> {
       "name": nameController.text,
       "email": emailController.text,
       "bio": bioController.text,
-      "password": passwordController.text
+      "password": passwordController.text,
+      "dob": dobController.text
     };
 
     var request = http.MultipartRequest(
