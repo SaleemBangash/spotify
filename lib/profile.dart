@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,6 +42,8 @@ class _profileState extends State<profile> {
     bioController.text = profileList[0].bio.toString();
     dobController.text = profileList[0].dob.toString();
   }
+
+  String dob = "Date of birth";
 
   @override
   Widget build(BuildContext context) {
@@ -208,25 +211,42 @@ class _profileState extends State<profile> {
                   SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
+                  InkWell(
+                    onTap: () {
+                      DatePicker.showDatePicker(
+                        context,
+                        showTitleActions: true,
+                        locale: LocaleType.en,
+                        onChanged: (date) {
+                          print('change $date');
+                          setState(() {
+                            dob = "${date.day}-${date.month}-${date.year}";
+                          });
+                        },
+                        onConfirm: (date) {
+                          print('confirm $date');
+                          setState(() {
+                            dob = "${date.day}-${date.month}-${date.year}";
+                          });
+                        },
+                      );
+                    },
+                    child: Container(
                       width: 290,
-                      // height: 45,
-                      child: TextFormField(
-                        controller: dobController,
-                        validator: (dob) => dob!.isEmpty ? 'Required' : null,
-                        style: TextStyle(height: 1.5),
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.date_range),
-                            // border: OutlineInputBorder(
-                            //     borderSide:
-                            //         BorderSide(color: Colors.black, width: 2.0),
-                            //     borderRadius: BorderRadius.circular(15)),
-                            hintText: "DOB",
-                            // filled: true,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10)),
-                        keyboardType: TextInputType.datetime,
-                      )),
+                      height: 45,
+
+                      // width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.2),
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Center(
+                        child: Text(
+                          dob,
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 30,
                   ),

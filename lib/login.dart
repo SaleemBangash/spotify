@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:spotify/Home.dart';
 import 'package:spotify/bottom_bar.dart';
+import 'package:spotify/forget_password_screen.dart';
 import 'package:spotify/models/user_model.dart';
 import 'package:spotify/registration.dart';
 import 'package:http/http.dart' as http;
@@ -136,6 +137,25 @@ class _LoginState extends State<Login> {
                       },
                       child: Text(
                         "Create account",
+                        style: TextStyle(
+                            fontSize: 17.0,
+                            fontStyle: FontStyle.normal,
+                            color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    (ForgetPasswordScreen())));
+                      },
+                      child: Text(
+                        "Forget Password",
                         style: TextStyle(
                             fontSize: 17.0,
                             fontStyle: FontStyle.normal,
