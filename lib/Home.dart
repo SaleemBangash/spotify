@@ -317,7 +317,7 @@ class _HomeState extends State<Home> {
                                           ),
                                       child: ClipOval(
                                         child: Image.network(
-                                          postList[index].image,
+                                          commentList[index].image,
                                           // width: 70.0,
                                           // height: 70.0,
                                           fit: BoxFit.cover,

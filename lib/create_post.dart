@@ -34,11 +34,11 @@ class _CreatePostState extends State<CreatePost> {
   List<CommunityModel> communityList = [];
   String? dropvalue;
   String _text = 'home';
-  changeText() {
-    setState(() {
-      _text = communityList[0].id.toString();
-    });
-  }
+  // changeText() {
+  //   setState(() {
+  //     _text = communityList[0].id.toString();
+  //   });
+  // }
 
   var items = [
     'Home',
@@ -97,7 +97,7 @@ class _CreatePostState extends State<CreatePost> {
                       //   community_id = communityList[0].id;
                       // });
 
-                      getCommunityList();
+                      getCommunityshowList();
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(),
@@ -117,7 +117,7 @@ class _CreatePostState extends State<CreatePost> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Select Community',
+                                  'Show Community',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Color.fromARGB(255, 0, 0, 0),
@@ -131,10 +131,9 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
                   ),
-
-                  SizedBox(
-                    height: 10,
-                  ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
                   GestureDetector(
                     onTap: () {
                       // setState(() {
@@ -175,50 +174,6 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
                   ),
-
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     // setState(() {
-                  //     //   community_id = communityList[0].id;
-                  //     // });
-
-                  //     getAllCommunityList();
-                  //   },
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(),
-                  //     child: Container(
-                  //       margin: EdgeInsets.all(19),
-                  //       decoration: BoxDecoration(
-                  //         color: Color.fromARGB(255, 220, 217, 217),
-                  //         border: Border.all(width: 1),
-                  //         borderRadius: BorderRadius.circular(10),
-                  //       ),
-                  //       width: 300,
-                  //       height: 40,
-                  //       child: Center(
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               GestureDetector(
-                  //                 child: Text(
-                  //                   'View All Communities',
-                  //                   style: TextStyle(
-                  //                     fontSize: 14,
-                  //                     color: Color.fromARGB(255, 0, 0, 0),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //               Icon(Icons.arrow_drop_down)
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
                   GestureDetector(
                     onTap: () => _showChoiceDialog(context),
                     child: ClipRRect(
@@ -268,7 +223,7 @@ class _CreatePostState extends State<CreatePost> {
                                 borderSide:
                                     BorderSide(color: Colors.black, width: 2.0),
                                 borderRadius: BorderRadius.circular(15)),
-                            // hintText: "Add home",
+                            hintText: "Add home",
                             filled: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10)),
@@ -297,7 +252,6 @@ class _CreatePostState extends State<CreatePost> {
                         keyboardType: TextInputType.text,
                         maxLines: 5,
                       )),
-
                   SizedBox(
                     height: 10,
                   ),
@@ -321,7 +275,7 @@ class _CreatePostState extends State<CreatePost> {
                           // registerUser(community_id, nameController.text);
                         }
                       }
-                      print(community_id);
+                      // print(community_id);
                     },
                     child: Container(
                       height: 40,
@@ -381,8 +335,9 @@ class _CreatePostState extends State<CreatePost> {
                                   print(
                                       "Community_id:::::::::::::::::::::::::::" +
                                           communityList[index].id);
+                                  descController.text = communityList[index].id;
                                 });
-                                changeText();
+
                                 // setState(() {
                                 //   _text = communityList[index].id;
                                 // });
@@ -395,6 +350,66 @@ class _CreatePostState extends State<CreatePost> {
                                 //               communityPost_id:
                                 //                   communityList[index].id,
                                 //             ))));
+                              },
+                              child: Text(
+                                communityList[index].community_name,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }));
+          });
+        });
+  }
+
+  _showCommunityModalBottomSheet(context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+                height: 600,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: communityList.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  // community_id = communityList[index].id;
+                                  print(
+                                      "Community_id:::::::::::::::::::::::::::" +
+                                          communityList[index].id);
+                                  // descController.text = communityList[index].id;
+                                });
+
+                                // setState(() {
+                                //   _text = communityList[index].id;
+                                // });
+                                // Navigator.of(context).pop();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            (ShowCommunityPost(
+                                              communityPost_id:
+                                                  communityList[index].id,
+                                            ))));
                               },
                               child: Text(
                                 communityList[index].community_name,
@@ -665,9 +680,9 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   void getCommunityList() async {
-    if (communityList.isNotEmpty) {
-      communityList.clear();
-    }
+    // if (communityList.isNotEmpty) {
+    //   communityList.clear();
+    // }
     print("POST FUNCTION CALLED:::::::::::::::::::::::::::" + userModel.token);
     Map<String, String> header = {
       'Content-type': 'application/json',
@@ -681,16 +696,13 @@ class _CreatePostState extends State<CreatePost> {
     if (response.statusCode == 200) {
       setState(() {
         var jsonBody = json.decode(response.body);
-
-        setState(() {
-          for (int i = 0; i < jsonBody['message'].length; i++) {
-            communityList.add(CommunityModel(
-              id: jsonBody['message'][i]['id'].toString(),
-              community_name:
-                  jsonBody['message'][i]['community_name'].toString(),
-            ));
-          }
-        });
+        for (int i = 0; i < jsonBody['message'].length; i++) {
+          communityList.add(CommunityModel(
+            id: jsonBody['message'][i]['id'].toString(),
+            community_name: jsonBody['message'][i]['community_name'].toString(),
+          ));
+        }
+        setState(() {});
         _playlistModalBottomSheet(context);
       });
     }
@@ -729,6 +741,33 @@ class _CreatePostState extends State<CreatePost> {
         });
         _allCommunityModalBottomSheet(context);
       });
+    }
+  }
+
+  void getCommunityshowList() async {
+    if (communityList.isNotEmpty) {
+      communityList.clear();
+    }
+    print("POST FUNCTION CALLED:::::::::::::::::::::::::::" + userModel.token);
+    Map<String, String> header = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      "Authorization": "Bearer " + userModel.token
+    };
+
+    var response = await http.get(
+        Uri.parse('http://spotify.bhattihospital.com/api/communityList'),
+        headers: header);
+    if (response.statusCode == 200) {
+      var jsonBody = json.decode(response.body);
+      for (int i = 0; i < jsonBody['message'].length; i++) {
+        communityList.add(CommunityModel(
+          id: jsonBody['message'][i]['id'].toString(),
+          community_name: jsonBody['message'][i]['community_name'].toString(),
+        ));
+      }
+      setState(() {});
+      _showCommunityModalBottomSheet(context);
     }
   }
 }

@@ -260,6 +260,7 @@ class _profileState extends State<profile> {
                         String dob = dobController.text;
                         // String imageFile = PickedFile.imageFile;
                         if (imageFile == null) {
+                          registerUser(name, email, bio, password, dob);
                         } else {
                           registerUser(name, email, bio, password, dob);
                           updateProfileData();
@@ -473,7 +474,7 @@ class _profileState extends State<profile> {
       "email": emailController.text,
       "bio": bioController.text,
       "password": passwordController.text,
-      "dob": dobController.text
+      "dob": dob
     };
 
     var request = http.MultipartRequest(
