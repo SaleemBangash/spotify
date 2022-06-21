@@ -63,7 +63,7 @@ class _NewcChatState extends State<NewcChat> {
                               // message_id = chatList[index].con_number;
                               userName = chatList[index].name;
                               message_id = chatList[index].reciever_id;
-                              receiverr_id = chatList[index].con_number;
+                              receiverr_id = chatList[index].reciever_id;
                               // print("Reciever id::::::::;:" + message_id);
                               // print("conn nmbr::::::::;:" +
                               //     chatList[index].con_number);
@@ -461,10 +461,7 @@ class _NewcChatState extends State<NewcChat> {
       setState(() {
         for (int i = 0; i < jsonBody['users'].length; i++) {
           chatList.add(ChatModel(
-              con_number: jsonBody['users'][i]['con_number'].toString(),
-              send_id: jsonBody['users'][i]['send_id'].toString(),
               reciever_id: jsonBody['users'][i]['reciever_id'].toString(),
-              status: jsonBody['users'][i]['status'].toString(),
               name: jsonBody['users'][i]['name'].toString(),
               image: jsonBody['users'][i]['image'].toString()));
         }

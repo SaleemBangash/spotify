@@ -19,7 +19,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  var _text = 'Connect';
+  String _text = 'Follow';
   bool aChecked = false;
   bool bChecked = false;
   bool cChecked = false;
@@ -29,6 +29,19 @@ class _SearchBarState extends State<SearchBar> {
   var formKey = GlobalKey<FormState>();
   List<SearchModel> searchList = [];
   String follower_id = '';
+  // String Status = '';
+  // var url = 'http://spotify.bhattihospital.com/api/FollowUser';
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+
+  //   setState(() {
+  //     String Status = searchList[0].status.toString();
+  //     print(Status);
+  //     super.initState();
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,6 +170,11 @@ class _SearchBarState extends State<SearchBar> {
                                                 .validate()) {
                                               // String comment = nameController.text;
                                               // String email = emailController.text;
+                                              // String status = searchList[index]
+                                              //     .status
+                                              //     .toString();
+                                              // Status = searchList[0].status;
+                                              // print("Status:::::" + Status);
                                               registerUser(
                                                   searchList[index].id);
                                             }
@@ -259,7 +277,11 @@ class _SearchBarState extends State<SearchBar> {
       var responseBody = json.decode(response.body);
       if (responseBody['success']) {
         setState(() {
-          _text = 'Following';
+          if (searchList[0].status == 0) {
+            _text = 'Follow';
+          } else {
+            _text = 'Following';
+          }
         });
       }
       if (responseBody['message'] == 'Friend request Sent Successfuly') {
@@ -268,7 +290,7 @@ class _SearchBarState extends State<SearchBar> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Friend Request Sent'),
+                title: Text('User Followed'),
               );
             });
 
@@ -308,14 +330,9 @@ class _SearchBarState extends State<SearchBar> {
           searchList.add(SearchModel(
               id: jsonBody['users'][i]['id'].toString(),
               name: jsonBody['users'][i]['name'].toString(),
-              userName: jsonBody['users'][i]['userName'].toString(),
-              email: jsonBody['users'][i]['email'].toString(),
-              email_verified_at:
-                  jsonBody['users'][i]['email_verified_at'].toString(),
               image: jsonBody['users'][i]['image'].toString(),
               bio: jsonBody['users'][i]['bio'].toString(),
-              created_at: jsonBody['users'][i]['created_at'].toString(),
-              updated_at: jsonBody['users'][i]['updated_at'].toString()));
+              status: jsonBody['users'][i]['status'].toString()));
         }
         setState(() {});
 

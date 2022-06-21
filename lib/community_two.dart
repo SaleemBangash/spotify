@@ -155,7 +155,7 @@ class _CommunityTwoState extends State<CommunityTwo> {
                                       width: 50,
                                       height: 50,
                                     ),
-                                    Text(csearchList[index].community_name)
+                                    Text(csearchList[index].name)
                                   ],
                                 ),
                               ),
@@ -290,12 +290,10 @@ class _CommunityTwoState extends State<CommunityTwo> {
       setState(() {
         for (int i = 0; i < jsonBody['users'].length; i++) {
           csearchList.add(CSearchModel(
-              id: jsonBody['users'][i]['id'].toString(),
-              interest_id: jsonBody['users'][i]['interest_id'].toString(),
-              user_id: jsonBody['users'][i]['user_id'].toString(),
-              community_name: jsonBody['users'][i]['community_name'].toString(),
-              created_at: jsonBody['users'][i]['created_at'].toString(),
-              updated_at: jsonBody['users'][i]['updated_at'].toString()));
+            id: jsonBody['users'][i]['id'].toString(),
+            name: jsonBody['users'][i]['community_name'].toString(),
+            status: jsonBody['users'][i]['status'].toString(),
+          ));
         }
       });
     }
